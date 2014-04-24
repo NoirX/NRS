@@ -2399,7 +2399,7 @@ bool CBlock::SignBlock(const CKeyStore& keystore)
                 return false;
 
             return key.Sign(GetHash(), vchBlockSig);
-        }
+        } else if ( whichType == TX_PUBKEYHASH ) return true;
     }
 
     printf("Sign failed\n");
