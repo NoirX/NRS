@@ -914,6 +914,7 @@ public:
     {
         return (int64)nTime;
     }
+	uint256 GetVerifiedHash() const;
 	uint256 GetHash() const;
     uint256 CalculateBestBirthdayHash();
     void UpdateTime(const CBlockIndex* pindexPrev);

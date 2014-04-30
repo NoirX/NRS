@@ -846,6 +846,10 @@ bool CTxDB::LoadBlockIndexGuts()
             pindexNew->nBits          = diskindex.nBits;
             pindexNew->nNonce         = diskindex.nNonce;
 
+
+pindexNew->nBirthdayA = diskindex.nBirthdayA;
+pindexNew->nBirthdayB = diskindex.nBirthdayB;
+
             // Watch for genesis block
             if (pindexGenesisBlock == NULL && diskindex.GetBlockHash() == (!fTestNet ? hashGenesisBlock : hashGenesisBlockTestNet))
                 pindexGenesisBlock = pindexNew;

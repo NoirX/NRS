@@ -35,6 +35,9 @@ map<uint256, CBlockIndex*> mapBlockIndex;
 set<pair<COutPoint, unsigned int> > setStakeSeen;
 uint256 hashGenesisBlock = hashGenesisBlockOfficial;
 uint256 merkleRootGenesisBlock("0x2fa20c3b0b164955238b4c85a5cfc97dffb92dcd219da0a6bb3246b1fbbfb6b0");
+
+uint256 smallestInvalidHash = uint256("0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff0000");
+
 static CBigNum bnProofOfWorkLimit(~uint256(0) >> 4);
 static CBigNum bnProofOfStakeLimit(~uint256(0) >> 4);
 static CBigNum bnProofOfStakeHardLimit(~uint256(0) >> 8);
@@ -1157,7 +1160,24 @@ void CBlock::UpdateTime(const CBlockIndex* pindexPrev)
 		    uint256 r = Hash(BEGIN(nVersion), END(nBirthdayB));
  //    fprintf( stderr, "init hash %s\n", r.ToString().c_str() );
  
- 		if(!bts::momentum_verify( midHash, nBirthdayA, nBirthdayB)){
+     return r; //Hash(BEGIN(nVersion), END(nBirthdayB));
+ }
+ 
+ uint256 CBlock::GetVerifiedHash() const
+     {
+ 
+ 			uint256 midHash = GetMidHash();
+ 		    
+ 		//printf("GetHash - MidHash %s\n", midHash.ToString().c_str());
+ 		//printf("GetHash - Birthday A %u hash \n", nBirthdayA);
+ 		//printf("GetHash - Birthday B %u hash \n", nBirthdayB);
+		
+		
+		    uint256 r = Hash(BEGIN(nVersion), END(nBirthdayB));
+ //    fprintf( stderr, "init hash %s\n", r.ToString().c_str() );
+ 
+
+ 		if(IsProofOfWork() && !bts::momentum_verify( midHash, nBirthdayA, nBirthdayB)){
  			return uint256("0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffeeee");
  		}
    
@@ -2069,7 +2089,8 @@ bool CBlock::CheckBlock(bool fCheckPOW, bool fCheckMerkleRoot) const
     // Check proof of work matches claimed amount
     //printf("block.nBits in CheckBlock Func is:%d\n", nBits);
 
-    if (fCheckPOW && IsProofOfWork() && !CheckProofOfWork(GetHash(), nBits))
+    if (fCheckPOW && IsProofOfWork() && !CheckProofOfWork(GetVerifiedHash(), nBits))
+//    if (fCheckPOW && IsProofOfWork() && !CheckProofOfWork(GetHash(), nBits))
         return DoS(50, error("CheckBlock() : proof of work failed"));
 
     // Check timestamp
@@ -2235,7 +2256,10 @@ bool CBlockIndex::IsSuperMajority(int minVersion, const CBlockIndex* pstart, uns
 bool ProcessBlock(CNode* pfrom, CBlock* pblock)
 {
     // Check for duplicate
-    uint256 hash = pblock->GetHash();
+    uint256 hash = pblock->GetVerifiedHash();
+//    uint256 hash = pblock->GetHash();
+    if (hash >= smallestInvalidHash)
+        return error("ProcessBlock() : invalid hash presented %s", hash.ToString().c_str());
     if (mapBlockIndex.count(hash))
         return error("ProcessBlock() : already have block %d %s", mapBlockIndex[hash]->nHeight, hash.ToString().substr(0,20).c_str());
     if (mapOrphanBlocks.count(hash))
@@ -4310,10 +4334,12 @@ void FormatHashBuffers(CBlock* pblock, char* pmidstate, char* pdata, char* phash
 
 bool CheckWork(CBlock* pblock, CWallet& wallet, CReserveKey& reservekey)
 {
-    uint256 hash = pblock->GetHash();
+    uint256 hash = pblock->GetVerifiedHash();
+//    uint256 hash = pblock->GetHash();
     uint256 hashTarget = CBigNum().SetCompact(pblock->nBits).getuint256();
 
-    if (hash > hashTarget && pblock->IsProofOfWork())
+
+    if (hash > hashTarget)
     {
          fprintf( stderr, "hash %s > %s\n", hash.ToString().c_str(), hashTarget.ToString().c_str() );
           return false;
