@@ -32,9 +32,9 @@ static const unsigned int MAX_ORPHAN_TRANSACTIONS = MAX_BLOCK_SIZE/100;
 static const unsigned int MAX_INV_SZ = 50000;
 static const int64 MIN_TX_FEE = 0.01 * COIN;
 static const int64 MIN_RELAY_TX_FEE = MIN_TX_FEE;
-static const int64 MAX_MONEY = 5000000 * COIN;//5 million
-static const int64 MAX_MINT_PROOF_OF_WORK = 80 * COIN;	//80 Coin per block
-static const int64 MAX_MINT_PROOF_OF_STAKE = 0.03 * MAX_MINT_PROOF_OF_WORK;	//3% interest
+static const int64 MAX_MONEY = 100000 * COIN;//50k
+static const int64 MAX_MINT_PROOF_OF_WORK = 100 * COIN;	//80 Coin per block
+static const int64 MAX_MINT_PROOF_OF_STAKE = 0 	//0% interest
 static const int64 MIN_TXOUT_AMOUNT = MIN_TX_FEE;
 static const unsigned int MAX_TX_COMMENT_LEN = 268; // NoirShares: 256 bytes + 12 little extra
 
@@ -48,7 +48,7 @@ static const int fHaveUPnP = true;
 static const int fHaveUPnP = false;
 #endif
 
-static const uint256 hashGenesisBlockOfficial("0x0184ba6f36581ce17b443111bdae8f367616a293be73a2bf344d78cdc95c08a4");
+static const uint256 hashGenesisBlockOfficial("0x");
 static const uint256 hashGenesisBlockTestNet("0x");
 
 static const int64 nMaxClockDrift = 2 * 60 * 60;        // two hours

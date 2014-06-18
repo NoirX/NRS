@@ -289,7 +289,7 @@ class CNoirSharesAddress : public CBase58Data
 public:
     enum
     {
-        PUBKEY_ADDRESS = 21,
+        PUBKEY_ADDRESS = 19,
         SCRIPT_ADDRESS = 30, 
         PUBKEY_ADDRESS_TEST = 111,
         SCRIPT_ADDRESS_TEST = 196,
@@ -418,7 +418,7 @@ public:
     void SetSecret(const CSecret& vchSecret, bool fCompressed)
     {
         assert(vchSecret.size() == 32);
-		SetData(fTestNet ? 239 : 128+21, &vchSecret[0], vchSecret.size());
+		SetData(fTestNet ? 237 : 128+19, &vchSecret[0], vchSecret.size());
 		if (fCompressed)
             vchData.push_back(1);
     }
@@ -437,7 +437,7 @@ public:
         bool fExpectTestNet = false;
         switch(nVersion)
         {
-            case 149 : // 128+21
+            case 147 : // 128+21
                 break;
 
             case 128 :

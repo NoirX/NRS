@@ -31,14 +31,16 @@ CCriticalSection cs_main;
 CTxMemPool mempool;
 unsigned int nTransactionsUpdated = 0;
 
+const bool IsCalculatingGenesisBlockHash = true;
+
 map<uint256, CBlockIndex*> mapBlockIndex;
 set<pair<COutPoint, unsigned int> > setStakeSeen;
 uint256 hashGenesisBlock = hashGenesisBlockOfficial;
-uint256 merkleRootGenesisBlock("0x2fa20c3b0b164955238b4c85a5cfc97dffb92dcd219da0a6bb3246b1fbbfb6b0");
+uint256 merkleRootGenesisBlock("0x");
 
 uint256 smallestInvalidHash = uint256("0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff0000");
 
-static CBigNum bnProofOfWorkLimit(~uint256(0) >> 4);
+static CBigNum bnProofOfWorkLimit(~uint256(0) >> 12);
 static CBigNum bnProofOfStakeLimit(~uint256(0) >> 4);
 static CBigNum bnProofOfStakeHardLimit(~uint256(0) >> 8);
 
@@ -46,12 +48,12 @@ static CBigNum bnProofOfStakeHardLimit(~uint256(0) >> 8);
 static CBigNum bnProofOfWorkLimitTestNet(~uint256(0) >> 2);
 static CBigNum bnProofOfStakeLimitTestNet(~uint256(0) >> 2);
 
-unsigned int nStakeMinAge = 60 * 60 * 24 * 7; // minimum age for coin age
-unsigned int nStakeMaxAge = 60 * 60 * 24 * 14; // stake age of full weight
-unsigned int nStakeTargetSpacing = 5 * 60; //  5 minute block spacing
-const int64 nChainStartTime = 139193290; 
+unsigned int nStakeMinAge = 60 * 60 * 24 * 30; // minimum age for coin age
+unsigned int nStakeMaxAge = 60 * 60 * 24 * 90; // stake age of full weight
+unsigned int nStakeTargetSpacing = 2 * 60; //  2 minute block spacing
+const int64 nChainStartTime = 0; 
 const int64 nTestNetStartTime = nChainStartTime; 
-int nCoinbaseMaturity = 10; // mining need 30 confirm
+int nCoinbaseMaturity = 30; // mining need 30 confirm
 CBlockIndex* pindexGenesisBlock = NULL;
 int nBestHeight = -1;
 CBigNum bnBestChainTrust = 0;
@@ -918,20 +920,8 @@ uint256 WantedByOrphan(const CBlock* pblockOrphan)
 // miner's coin base reward based on nBits
 int64 GetProofOfWorkReward(int nHeight, int64 nFees, uint256 prevHash)
 {
-	int64 nSubsidy = 80 * COIN;
+	int64 nSubsidy = 0.1 * COIN;
 	
-	// Subsidy is reduced by 5% every 3000 blocks, 
-    int exponent=(nHeight / 3000);
-    for(int i=0;i<exponent;i++){
-        nSubsidy=nSubsidy*19;
-	nSubsidy=nSubsidy/20;
-    }
-    // Subsidy may be a minimum of 0.19012850*COIN
-    // Expected 365.25 * 24 * 12 * 0.19012850 = approx 40,000 coins per year, 1% annual inflation
-    if(nSubsidy< 2 *COIN){nSubsidy= 2 *COIN;}
-    
-    if (nHeight== 10) {nSubsidy= 250000 *COIN;}
-
 	return nSubsidy + nFees;
 }
 
@@ -2584,7 +2574,7 @@ bool LoadBlockIndex(bool fAllowNew)
 
 
         // Genesis block
-        const char* pszTimestamp = "NoirShares - Future in hand.";
+        const char* pszTimestamp = "NoirLotto - Luck is a game.";
         CTransaction txNew;
         txNew.nTime = nChainStartTime;
         txNew.vin.resize(1);
@@ -2604,9 +2594,30 @@ bool LoadBlockIndex(bool fAllowNew)
         block.nVersion = 1;
         block.nTime    = nChainStartTime;
         block.nBits    = bnProofOfWorkLimit.GetCompact();
-        block.nNonce   = 4;
-		block.nBirthdayA   = 21327367;
-        block.nBirthdayB   = 35589541;
+        block.nNonce   = 0;
+		block.nBirthdayA   = 0;
+        block.nBirthdayB   = 0;
+        
+        if (IsCalculatingGenesisBlockHash && (block.GetHash() != hashGenesisBlock)) {
+			block.nNonce = 0;
+
+            // This will figure out a valid hash and Nonce if you're
+            // creating a different genesis block:
+            uint256 hashTarget = CBigNum().SetCompact(block.nBits).getuint256();
+            while (block.GetHash() > hashTarget)
+            {
+                ++block.nNonce;
+                if (block.nNonce == 0)
+                {
+                    printf("NONCE WRAPPED, incrementing time");
+                    ++block.nTime;
+                }
+				if (block.nNonce % 10000 == 0)
+				{
+					printf("nonce %08u: hash = %s \n", block.nNonce, block.GetHash().ToString().c_str());
+				}
+            }
+        }
         
         //// debug print
         uint256 hash = block.GetHash();
