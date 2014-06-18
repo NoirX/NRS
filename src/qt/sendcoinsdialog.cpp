@@ -3,7 +3,7 @@
 #include "init.h"
 #include "walletmodel.h"
 #include "addresstablemodel.h"
-#include "NoirSharesunits.h"
+#include "NoirTokensunits.h"
 #include "addressbookpage.h"
 #include "optionsmodel.h"
 #include "sendcoinsentry.h"
@@ -33,7 +33,7 @@ SendCoinsDialog::SendCoinsDialog(QWidget *parent) :
 #if QT_VERSION >= 0x040700
     /* Do not move this to the XML file, Qt before 4.7 will choke on it */
     ui->editTxComment->setPlaceholderText(tr("Enter a transaction comment (MAX 256 Characters) (Note: This information is public)"));
-    ui->lineEditCoinControlChange->setPlaceholderText(tr("Enter a NoirShares address (e.g. 9qvEauKhgUzFn8pyfYLz2JA6etyEvkvWXg)"));
+    ui->lineEditCoinControlChange->setPlaceholderText(tr("Enter a NoirTokens address (e.g. 9qvEauKhgUzFn8pyfYLz2JA6etyEvkvWXg)"));
 #endif
 
     addEntry();
@@ -43,7 +43,7 @@ SendCoinsDialog::SendCoinsDialog(QWidget *parent) :
 
 
     // Coin Control
-    ui->lineEditCoinControlChange->setFont(GUIUtil::NoirSharesAddressFont());
+    ui->lineEditCoinControlChange->setFont(GUIUtil::NoirTokensAddressFont());
     connect(ui->pushButtonCoinControl, SIGNAL(clicked()), this, SLOT(coinControlButtonClicked()));
     connect(ui->checkBoxCoinControlChange, SIGNAL(stateChanged(int)), this, SLOT(coinControlChangeChecked(int)));
     connect(ui->lineEditCoinControlChange, SIGNAL(textEdited(const QString &)), this, SLOT(coinControlChangeEdited(const QString &)));
@@ -145,9 +145,9 @@ void SendCoinsDialog::on_sendButton_clicked()
     foreach(const SendCoinsRecipient &rcp, recipients)
     {
 		#if QT_VERSION >= 0x050000
-        formatted.append(tr("<b>%1</b> to %2 (%3)").arg(NoirSharesUnits::formatWithUnit(NoirSharesUnits::BTC, rcp.amount), rcp.label.toHtmlEscaped(), rcp.address));
+        formatted.append(tr("<b>%1</b> to %2 (%3)").arg(NoirTokensUnits::formatWithUnit(NoirTokensUnits::BTC, rcp.amount), rcp.label.toHtmlEscaped(), rcp.address));
 		#else 
-        formatted.append(tr("<b>%1</b> to %2 (%3)").arg(NoirSharesUnits::formatWithUnit(NoirSharesUnits::BTC, rcp.amount), Qt::escape(rcp.label), rcp.address));
+        formatted.append(tr("<b>%1</b> to %2 (%3)").arg(NoirTokensUnits::formatWithUnit(NoirTokensUnits::BTC, rcp.amount), Qt::escape(rcp.label), rcp.address));
      #endif
     }
 
@@ -199,7 +199,7 @@ void SendCoinsDialog::on_sendButton_clicked()
     case WalletModel::AmountWithFeeExceedsBalance:
         QMessageBox::warning(this, tr("Send Coins"),
             tr("The total exceeds your balance when the %1 transaction fee is included.").
-            arg(NoirSharesUnits::formatWithUnit(NoirSharesUnits::BTC, sendstatus.fee)),
+            arg(NoirTokensUnits::formatWithUnit(NoirTokensUnits::BTC, sendstatus.fee)),
             QMessageBox::Ok, QMessageBox::Ok);
         break;
     case WalletModel::DuplicateAddress:
@@ -343,9 +343,9 @@ bool SendCoinsDialog::handleURI(const QString &uri)
 {
     SendCoinsRecipient rv;
     // URI has to be valid
-    if (GUIUtil::parseNoirSharesURI(uri, &rv))
+    if (GUIUtil::parseNoirTokensURI(uri, &rv))
     {
-        CNoirSharesAddress address(rv.address.toStdString());
+        CNoirTokensAddress address(rv.address.toStdString());
         if (!address.IsValid())
             return false;
         pasteEntry(rv);
@@ -364,7 +364,7 @@ void SendCoinsDialog::setBalance(qint64 balance, qint64 stake, qint64 unconfirme
         return;
 
     int unit = model->getOptionsModel()->getDisplayUnit();
-    ui->labelBalance->setText(NoirSharesUnits::formatWithUnit(unit, balance));
+    ui->labelBalance->setText(NoirTokensUnits::formatWithUnit(unit, balance));
 }
 
 void SendCoinsDialog::updateDisplayUnit()
@@ -372,7 +372,7 @@ void SendCoinsDialog::updateDisplayUnit()
     if(model && model->getOptionsModel())
     {
         // Update labelBalance with the current balance and the current unit
-        ui->labelBalance->setText(NoirSharesUnits::formatWithUnit(model->getOptionsModel()->getDisplayUnit(), model->getBalance()));
+        ui->labelBalance->setText(NoirTokensUnits::formatWithUnit(model->getOptionsModel()->getDisplayUnit(), model->getBalance()));
     }
 }
 
@@ -439,7 +439,7 @@ void SendCoinsDialog::coinControlChangeChecked(int state)
     if (model)
     {
         if (state == Qt::Checked)
-            CoinControlDialog::coinControl->destChange = CNoirSharesAddress(ui->lineEditCoinControlChange->text().toStdString()).Get();
+            CoinControlDialog::coinControl->destChange = CNoirTokensAddress(ui->lineEditCoinControlChange->text().toStdString()).Get();
         else
             CoinControlDialog::coinControl->destChange = CNoDestination();
     }
@@ -452,16 +452,16 @@ void SendCoinsDialog::coinControlChangeEdited(const QString & text)
 {
     if (model)
     {
-        CoinControlDialog::coinControl->destChange = CNoirSharesAddress(text.toStdString()).Get();
+        CoinControlDialog::coinControl->destChange = CNoirTokensAddress(text.toStdString()).Get();
         
         // label for the change address
         ui->labelCoinControlChangeLabel->setStyleSheet("QLabel{color:white;}");
         if (text.isEmpty())
             ui->labelCoinControlChangeLabel->setText("");
-        else if (!CNoirSharesAddress(text.toStdString()).IsValid())
+        else if (!CNoirTokensAddress(text.toStdString()).IsValid())
         {
             ui->labelCoinControlChangeLabel->setStyleSheet("QLabel{color:red;}");
-            ui->labelCoinControlChangeLabel->setText(tr("WARNING: Invalid NoirShares address"));
+            ui->labelCoinControlChangeLabel->setText(tr("WARNING: Invalid NoirTokens address"));
         }
         else
         {
@@ -472,7 +472,7 @@ void SendCoinsDialog::coinControlChangeEdited(const QString & text)
             {
                 CPubKey pubkey;
                 CKeyID keyid;
-                CNoirSharesAddress(text.toStdString()).GetKeyID(keyid);
+                CNoirTokensAddress(text.toStdString()).GetKeyID(keyid);
                 if (model->getPubKey(keyid, pubkey))
                     ui->labelCoinControlChangeLabel->setText(tr("(no label)"));
                 else

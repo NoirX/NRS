@@ -13,8 +13,8 @@
  * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
-#ifndef NoirShares_STRLCPY_H
-#define NoirShares_STRLCPY_H
+#ifndef NoirTokens_STRLCPY_H
+#define NoirTokens_STRLCPY_H
 
 #include <stdlib.h>
 #include <string.h>

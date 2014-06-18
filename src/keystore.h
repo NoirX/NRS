@@ -1,9 +1,9 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
-// Copyright (c) 2013  The NoirShares developer
+// Copyright (c) 2013  The NoirTokens developer
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
-#ifndef NoirShares_KEYSTORE_H
-#define NoirShares_KEYSTORE_H
+#ifndef NoirTokens_KEYSTORE_H
+#define NoirTokens_KEYSTORE_H
 
 #include "crypter.h"
 #include "sync.h"
@@ -29,7 +29,7 @@ public:
     virtual void GetKeys(std::set<CKeyID> &setAddress) const =0;
     virtual bool GetPubKey(const CKeyID &address, CPubKey& vchPubKeyOut) const;
 
-    // Support for BIP 0013 : see https://en.NoirShares.it/wiki/BIP_0013
+    // Support for BIP 0013 : see https://en.NoirTokens.it/wiki/BIP_0013
     virtual bool AddCScript(const CScript& redeemScript) =0;
     virtual bool HaveCScript(const CScriptID &hash) const =0;
     virtual bool GetCScript(const CScriptID &hash, CScript& redeemScriptOut) const =0;

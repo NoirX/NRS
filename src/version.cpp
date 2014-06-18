@@ -1,4 +1,4 @@
-// Copyright (c) 2012 The NoirShares developers
+// Copyright (c) 2012 The NoirTokens developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 #include <string>
@@ -6,9 +6,9 @@
 #include "version.h"
 
 // Name of client reported in the 'version' message. Report the same name
-// for both NoirSharesd and NoirShares-qt, to make it harder for attackers to
+// for both NoirTokensd and NoirTokens-qt, to make it harder for attackers to
 // target servers or GUI users specifically.
-const std::string CLIENT_NAME("NoirShares");
+const std::string CLIENT_NAME("NoirTokens");
 
 // Client version number
 #define CLIENT_VERSION_SUFFIX   "-Barwizi"

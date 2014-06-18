@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
-// Copyright (c) 2013  The NoirShares developer
+// Copyright (c) 2013  The NoirTokens developer
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -196,7 +196,7 @@ ReadKeyValue(CWallet* pwallet, CDataStream& ssKey, CDataStream& ssValue,
         {
             string strAddress;
             ssKey >> strAddress;
-            ssValue >> pwallet->mapAddressBook[CNoirSharesAddress(strAddress).Get()];
+            ssValue >> pwallet->mapAddressBook[CNoirTokensAddress(strAddress).Get()];
         }
         else if (strType == "tx")
         {
@@ -485,7 +485,7 @@ DBErrors CWalletDB::LoadWallet(CWallet* pwallet)
 void ThreadFlushWalletDB(void* parg)
 {
     // Make this thread recognisable as the wallet flushing thread
-    RenameThread("NoirShares-wallet");
+    RenameThread("NoirTokens-wallet");
 
     const string& strFile = ((const string*)parg)[0];
     static bool fOneThread;

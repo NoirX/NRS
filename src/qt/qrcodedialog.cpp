@@ -1,7 +1,7 @@
 #include "qrcodedialog.h"
 #include "ui_qrcodedialog.h"
 
-#include "NoirSharesunits.h"
+#include "NoirTokensunits.h"
 #include "guiconstants.h"
 #include "guiutil.h"
 #include "optionsmodel.h"
@@ -85,7 +85,7 @@ void QRCodeDialog::genCode()
 
 QString QRCodeDialog::getURI()
 {
-    QString ret = QString("NoirShares:%1").arg(address);
+    QString ret = QString("NoirTokens:%1").arg(address);
     int paramCount = 0;
 
     ui->outUri->clear();
@@ -95,7 +95,7 @@ QString QRCodeDialog::getURI()
         if (ui->lnReqAmount->validate())
         {
             // even if we allow a non BTC unit input in lnReqAmount, we generate the URI with BTC as unit (as defined in BIP21)
-            ret += QString("?amount=%1").arg(NoirSharesUnits::format(NoirSharesUnits::BTC, ui->lnReqAmount->value()));
+            ret += QString("?amount=%1").arg(NoirTokensUnits::format(NoirTokensUnits::BTC, ui->lnReqAmount->value()));
             paramCount++;
         }
         else

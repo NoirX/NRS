@@ -1,16 +1,16 @@
-#ifndef NoirSharesADDRESSVALIDATOR_H
-#define NoirSharesADDRESSVALIDATOR_H
+#ifndef NoirTokensADDRESSVALIDATOR_H
+#define NoirTokensADDRESSVALIDATOR_H
 
 #include <QRegExpValidator>
 
 /** Base48 entry widget validator.
    Corrects near-miss characters and refuses characters that are no part of base48.
  */
-class NoirSharesAddressValidator : public QValidator
+class NoirTokensAddressValidator : public QValidator
 {
     Q_OBJECT
 public:
-    explicit NoirSharesAddressValidator(QObject *parent = 0);
+    explicit NoirTokensAddressValidator(QObject *parent = 0);
 
     State validate(QString &input, int &pos) const;
 
@@ -21,4 +21,4 @@ public slots:
 
 };
 
-#endif // NoirSharesADDRESSVALIDATOR_H
+#endif // NoirTokensADDRESSVALIDATOR_H

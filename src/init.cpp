@@ -1,10 +1,10 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
-// Copyright (c) 2013  The NoirShares developer
+// Copyright (c) 2013  The NoirTokens developer
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 #include "db.h"
 #include "walletdb.h"
-#include "NoirSharesrpc.h"
+#include "NoirTokensrpc.h"
 #include "net.h"
 #include "init.h"
 #include "util.h"
@@ -43,7 +43,7 @@ void ExitTimeout(void* parg)
 void StartShutdown()
 {
 #ifdef QT_GUI
-    // ensure we leave the Qt main loop for a clean GUI exit (Shutdown() is called in NoirShares.cpp afterwards)
+    // ensure we leave the Qt main loop for a clean GUI exit (Shutdown() is called in NoirTokens.cpp afterwards)
     uiInterface.QueueShutdown();
 #else
     // Without UI, Shutdown() can simply be started in a new thread
@@ -57,7 +57,7 @@ void Shutdown(void* parg)
     static bool fTaken;
 
     // Make this thread recognisable as the shutdown thread
-    RenameThread("NoirShares-shutoff");
+    RenameThread("NoirTokens-shutoff");
 
     bool fFirstThread = false;
     {
@@ -81,10 +81,10 @@ void Shutdown(void* parg)
         delete pwalletMain;
         NewThread(ExitTimeout, NULL);
         Sleep(50);
-        printf("NoirShares exited\n\n");
+        printf("NoirTokens exited\n\n");
         fExit = true;
 #ifndef QT_GUI
-        // ensure non-UI client gets exited here, but let NoirShares-Qt reach 'return 0;' in NoirShares.cpp
+        // ensure non-UI client gets exited here, but let NoirTokens-Qt reach 'return 0;' in NoirTokens.cpp
         exit(0);
 #endif
     }
@@ -124,7 +124,7 @@ bool AppInit(int argc, char* argv[])
         //
         // Parameters
         //
-        // If Qt is used, parameters/NoirShares.conf are parsed in qt/NoirShares.cpp's main()
+        // If Qt is used, parameters/NoirTokens.conf are parsed in qt/NoirTokens.cpp's main()
         ParseParameters(argc, argv);
         if (!boost::filesystem::is_directory(GetDataDir(false)))
         {
@@ -135,13 +135,13 @@ bool AppInit(int argc, char* argv[])
 
         if (mapArgs.count("-?") || mapArgs.count("--help"))
         {
-            // First part of help message is specific to NoirSharesd / RPC client
-            std::string strUsage = _("NoirShares version") + " " + FormatFullVersion() + "\n\n" +
+            // First part of help message is specific to NoirTokensd / RPC client
+            std::string strUsage = _("NoirTokens version") + " " + FormatFullVersion() + "\n\n" +
                 _("Usage:") + "\n" +
-                  "  NoirSharesd [options]                     " + "\n" +
-                  "  NoirSharesd [options] <command> [params]  " + _("Send command to -server or NoirSharesd") + "\n" +
-                  "  NoirSharesd [options] help                " + _("List commands") + "\n" +
-                  "  NoirSharesd [options] help <command>      " + _("Get help for a command") + "\n";
+                  "  NoirTokensd [options]                     " + "\n" +
+                  "  NoirTokensd [options] <command> [params]  " + _("Send command to -server or NoirTokensd") + "\n" +
+                  "  NoirTokensd [options] help                " + _("List commands") + "\n" +
+                  "  NoirTokensd [options] help <command>      " + _("Get help for a command") + "\n";
 
             strUsage += "\n" + HelpMessage();
 
@@ -151,7 +151,7 @@ bool AppInit(int argc, char* argv[])
 
         // Command-line RPC
         for (int i = 1; i < argc; i++)
-            if (!IsSwitchChar(argv[i][0]) && !boost::algorithm::istarts_with(argv[i], "NoirShares:"))
+            if (!IsSwitchChar(argv[i][0]) && !boost::algorithm::istarts_with(argv[i], "NoirTokens:"))
                 fCommandLine = true;
 
         if (fCommandLine)
@@ -177,7 +177,7 @@ int main(int argc, char* argv[])
 {
     bool fRet = false;
 
-    // Connect NoirSharesd signal handlers
+    // Connect NoirTokensd signal handlers
     noui_connect();
 
     fRet = AppInit(argc, argv);
@@ -191,13 +191,13 @@ int main(int argc, char* argv[])
 
 bool static InitError(const std::string &str)
 {
-    uiInterface.ThreadSafeMessageBox(str, _("NoirShares"), CClientUIInterface::OK | CClientUIInterface::MODAL);
+    uiInterface.ThreadSafeMessageBox(str, _("NoirTokens"), CClientUIInterface::OK | CClientUIInterface::MODAL);
     return false;
 }
 
 bool static InitWarning(const std::string &str)
 {
-    uiInterface.ThreadSafeMessageBox(str, _("NoirShares"), CClientUIInterface::OK | CClientUIInterface::ICON_EXCLAMATION | CClientUIInterface::MODAL);
+    uiInterface.ThreadSafeMessageBox(str, _("NoirTokens"), CClientUIInterface::OK | CClientUIInterface::ICON_EXCLAMATION | CClientUIInterface::MODAL);
     return true;
 }
 
@@ -219,8 +219,8 @@ std::string HelpMessage()
 {
     string strUsage = _("Options:") + "\n" +
         "  -?                     " + _("This help message") + "\n" +
-        "  -conf=<file>           " + _("Specify configuration file (default: NoirShares.conf)") + "\n" +
-        "  -pid=<file>            " + _("Specify pid file (default: NoirSharesd.pid)") + "\n" +
+        "  -conf=<file>           " + _("Specify configuration file (default: NoirTokens.conf)") + "\n" +
+        "  -pid=<file>            " + _("Specify pid file (default: NoirTokensd.pid)") + "\n" +
         "  -gen                   " + _("Generate coins") + "\n" +
         "  -gen=0                 " + _("Don't generate coins") + "\n" +
         "  -datadir=<dir>         " + _("Specify data directory") + "\n" +
@@ -291,7 +291,7 @@ std::string HelpMessage()
         "  -blockmaxsize=<n>      "   + _("Set maximum block size in bytes (default: 250000)") + "\n" +
         "  -blockprioritysize=<n> "   + _("Set maximum size of high-priority/low-fee transactions in bytes (default: 27000)") + "\n" +
 
-        "\n" + _("SSL options: (see the NoirShares Wiki for SSL setup instructions)") + "\n" +
+        "\n" + _("SSL options: (see the NoirTokens Wiki for SSL setup instructions)") + "\n" +
         "  -rpcssl                                  " + _("Use OpenSSL (https) for JSON-RPC connections") + "\n" +
         "  -rpcsslcertificatechainfile=<file.cert>  " + _("Server certificate file (default: server.cert)") + "\n" +
         "  -rpcsslprivatekeyfile=<file.pem>         " + _("Server private key (default: server.pem)") + "\n" +
@@ -300,7 +300,7 @@ std::string HelpMessage()
     return strUsage;
 }
 
-/** Initialize NoirShares.
+/** Initialize NoirTokens.
  *  @pre Parameters should be parsed and config file should be read.
  */
 bool AppInit2()
@@ -444,13 +444,13 @@ bool AppInit2()
 
     std::string strDataDir = GetDataDir().string();
 
-    // Make sure only a single NoirShares process is using the data directory.
+    // Make sure only a single NoirTokens process is using the data directory.
     boost::filesystem::path pathLockFile = GetDataDir() / ".lock";
     FILE* file = fopen(pathLockFile.string().c_str(), "a"); // empty lock file; created if it doesn't exist.
     if (file) fclose(file);
     static boost::interprocess::file_lock lock(pathLockFile.string().c_str());
     if (!lock.try_lock())
-        return InitError(strprintf(_("Cannot obtain a lock on data directory %s.  NoirShares is probably already running."), strDataDir.c_str()));
+        return InitError(strprintf(_("Cannot obtain a lock on data directory %s.  NoirTokens is probably already running."), strDataDir.c_str()));
 
 #if !defined(WIN32) && !defined(QT_GUI)
     if (fDaemon)
@@ -477,7 +477,7 @@ bool AppInit2()
     if (GetBoolArg("-shrinkdebugfile", !fDebug))
         ShrinkDebugFile();
     printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
-    printf("NoirShares version %s (%s)\n", FormatFullVersion().c_str(), CLIENT_DATE.c_str());
+    printf("NoirTokens version %s (%s)\n", FormatFullVersion().c_str(), CLIENT_DATE.c_str());
     printf("Using OpenSSL version %s\n", SSLeay_version(SSLEAY_VERSION));
     if (!fLogTimestamps)
         printf("Startup time: %s\n", DateTimeStrFormat("%x %H:%M:%S", GetTime()).c_str());
@@ -486,7 +486,7 @@ bool AppInit2()
     std::ostringstream strErrors;
 
     if (fDaemon)
-        fprintf(stdout, "NoirShares server starting\n");
+        fprintf(stdout, "NoirTokens server starting\n");
 
     int64 nStart;
 
@@ -518,7 +518,7 @@ bool AppInit2()
                                      " Original wallet.dat saved as wallet.{timestamp}.bak in %s; if"
                                      " your balance or transactions are incorrect you should"
                                      " restore from a backup."), strDataDir.c_str());
-            uiInterface.ThreadSafeMessageBox(msg, _("NoirShares"), CClientUIInterface::OK | CClientUIInterface::ICON_EXCLAMATION | CClientUIInterface::MODAL);
+            uiInterface.ThreadSafeMessageBox(msg, _("NoirTokens"), CClientUIInterface::OK | CClientUIInterface::ICON_EXCLAMATION | CClientUIInterface::MODAL);
         }
         if (r == CDBEnv::RECOVER_FAIL)
             return InitError(_("wallet.dat corrupt, salvage failed"));
@@ -674,7 +674,7 @@ bool AppInit2()
         return InitError(_("Error loading blkindex.dat"));
 
     // as LoadBlockIndex can take several minutes, it's possible the user
-    // requested to kill NoirShares-qt during the last operation. If so, exit.
+    // requested to kill NoirTokens-qt during the last operation. If so, exit.
     // As the program has not fully started yet, Shutdown() is possibly overkill.
     if (fRequestShutdown)
     {
@@ -728,13 +728,13 @@ bool AppInit2()
         {
             string msg(_("Warning: error reading wallet.dat! All keys read correctly, but transaction data"
                          " or address book entries might be missing or incorrect."));
-            uiInterface.ThreadSafeMessageBox(msg, _("NoirShares"), CClientUIInterface::OK | CClientUIInterface::ICON_EXCLAMATION | CClientUIInterface::MODAL);
+            uiInterface.ThreadSafeMessageBox(msg, _("NoirTokens"), CClientUIInterface::OK | CClientUIInterface::ICON_EXCLAMATION | CClientUIInterface::MODAL);
         }
         else if (nLoadWalletRet == DB_TOO_NEW)
-            strErrors << _("Error loading wallet.dat: Wallet requires newer version of NoirShares") << "\n";
+            strErrors << _("Error loading wallet.dat: Wallet requires newer version of NoirTokens") << "\n";
         else if (nLoadWalletRet == DB_NEED_REWRITE)
         {
-            strErrors << _("Wallet needed to be rewritten: restart NoirShares to complete") << "\n";
+            strErrors << _("Wallet needed to be rewritten: restart NoirTokens to complete") << "\n";
             printf("%s", strErrors.str().c_str());
             return InitError(strErrors.str());
         }

@@ -1,4 +1,4 @@
-// Copyright (c) 2013 NoirShares Developers
+// Copyright (c) 2013 NoirTokens Developers
 
 #include <string.h>
 #include "pbkdf2.h"

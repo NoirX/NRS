@@ -1,9 +1,9 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
-// Copyright (c) 2013  The NoirShares developer
+// Copyright (c) 2013  The NoirTokens developer
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
-#ifndef NoirShares_WALLETDB_H
-#define NoirShares_WALLETDB_H
+#ifndef NoirTokens_WALLETDB_H
+#define NoirTokens_WALLETDB_H
 
 #include "db.h"
 #include "base58.h"
@@ -160,4 +160,4 @@ public:
     static bool Recover(CDBEnv& dbenv, std::string filename);
 };
 
-#endif // NoirShares_WALLETDB_H
+#endif // NoirTokens_WALLETDB_H

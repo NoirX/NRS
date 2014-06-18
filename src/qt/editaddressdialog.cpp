@@ -95,7 +95,7 @@ void EditAddressDialog::accept()
             break;
         case AddressTableModel::INVALID_ADDRESS:
             QMessageBox::warning(this, windowTitle(),
-                tr("The entered address \"%1\" is not a valid NoirShares address.").arg(ui->addressEdit->text()),
+                tr("The entered address \"%1\" is not a valid NoirTokens address.").arg(ui->addressEdit->text()),
                 QMessageBox::Ok, QMessageBox::Ok);
             return;
         case AddressTableModel::WALLET_UNLOCK_FAILURE:

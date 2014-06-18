@@ -1,23 +1,23 @@
-#include "NoirSharesunits.h"
+#include "NoirTokensunits.h"
 
 #include <QStringList>
 
-NoirSharesUnits::NoirSharesUnits(QObject *parent):
+NoirTokensUnits::NoirTokensUnits(QObject *parent):
         QAbstractListModel(parent),
         unitlist(availableUnits())
 {
 }
 
-QList<NoirSharesUnits::Unit> NoirSharesUnits::availableUnits()
+QList<NoirTokensUnits::Unit> NoirTokensUnits::availableUnits()
 {
-    QList<NoirSharesUnits::Unit> unitlist;
+    QList<NoirTokensUnits::Unit> unitlist;
     unitlist.append(BTC);
     unitlist.append(mBTC);
     unitlist.append(uBTC);
     return unitlist;
 }
 
-bool NoirSharesUnits::valid(int unit)
+bool NoirTokensUnits::valid(int unit)
 {
     switch(unit)
     {
@@ -30,29 +30,29 @@ bool NoirSharesUnits::valid(int unit)
     }
 }
 
-QString NoirSharesUnits::name(int unit)
+QString NoirTokensUnits::name(int unit)
 {
     switch(unit)
     {
-    case BTC: return QString("NRS");
-    case mBTC: return QString("mNRS");
-    case uBTC: return QString::fromUtf8("μNRS");
+    case BTC: return QString("NRT");
+    case mBTC: return QString("mNRT");
+    case uBTC: return QString::fromUtf8("μNRT");
     default: return QString("???");
     }
 }
 
-QString NoirSharesUnits::description(int unit)
+QString NoirTokensUnits::description(int unit)
 {
     switch(unit)
     {
-    case BTC: return QString("NoirSharess");
-    case mBTC: return QString("Milli-NoirSharess (1 / 1,000)");
-    case uBTC: return QString("Micro-NoirSharess (1 / 1,000,000)");
+    case BTC: return QString("NoirTokenss");
+    case mBTC: return QString("Milli-NoirTokenss (1 / 1,000)");
+    case uBTC: return QString("Micro-NoirTokenss (1 / 1,000,000)");
     default: return QString("???");
     }
 }
 
-qint64 NoirSharesUnits::factor(int unit)
+qint64 NoirTokensUnits::factor(int unit)
 {
     switch(unit)
     {
@@ -63,7 +63,7 @@ qint64 NoirSharesUnits::factor(int unit)
     }
 }
 
-int NoirSharesUnits::amountDigits(int unit)
+int NoirTokensUnits::amountDigits(int unit)
 {
     switch(unit)
     {
@@ -74,7 +74,7 @@ int NoirSharesUnits::amountDigits(int unit)
     }
 }
 
-int NoirSharesUnits::decimals(int unit)
+int NoirTokensUnits::decimals(int unit)
 {
     switch(unit)
     {
@@ -85,7 +85,7 @@ int NoirSharesUnits::decimals(int unit)
     }
 }
 
-QString NoirSharesUnits::format(int unit, qint64 n, bool fPlus)
+QString NoirTokensUnits::format(int unit, qint64 n, bool fPlus)
 {
     // Note: not using straight sprintf here because we do NOT want
     // localized number formatting.
@@ -112,12 +112,12 @@ QString NoirSharesUnits::format(int unit, qint64 n, bool fPlus)
     return quotient_str + QString(".") + remainder_str;
 }
 
-QString NoirSharesUnits::formatWithUnit(int unit, qint64 amount, bool plussign)
+QString NoirTokensUnits::formatWithUnit(int unit, qint64 amount, bool plussign)
 {
     return format(unit, amount, plussign) + QString(" ") + name(unit);
 }
 
-bool NoirSharesUnits::parse(int unit, const QString &value, qint64 *val_out)
+bool NoirTokensUnits::parse(int unit, const QString &value, qint64 *val_out)
 {
     if(!valid(unit) || value.isEmpty())
         return false; // Refuse to parse invalid unit or empty string
@@ -154,13 +154,13 @@ bool NoirSharesUnits::parse(int unit, const QString &value, qint64 *val_out)
     return ok;
 }
 
-int NoirSharesUnits::rowCount(const QModelIndex &parent) const
+int NoirTokensUnits::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
     return unitlist.size();
 }
 
-QVariant NoirSharesUnits::data(const QModelIndex &index, int role) const
+QVariant NoirTokensUnits::data(const QModelIndex &index, int role) const
 {
     int row = index.row();
     if(row >= 0 && row < unitlist.size())

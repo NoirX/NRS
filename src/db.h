@@ -1,9 +1,9 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
-// Copyright (c) 2013  The NoirShares developer
+// Copyright (c) 2013  The NoirTokens developer
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
-#ifndef NoirShares_DB_H
-#define NoirShares_DB_H
+#ifndef NoirTokens_DB_H
+#define NoirTokens_DB_H
 
 #include "main.h"
 
@@ -363,4 +363,4 @@ public:
     bool Read(CAddrMan& addr);
 };
 
-#endif // NoirShares_DB_H
+#endif // NoirTokens_DB_H

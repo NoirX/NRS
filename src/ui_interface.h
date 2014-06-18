@@ -1,9 +1,9 @@
 // Copyright (c) 2010 Satoshi Nakamoto
-// Copyright (c) 2013 The NoirShares developer
+// Copyright (c) 2013 The NoirTokens developer
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
-#ifndef NoirShares_UI_INTERFACE_H
-#define NoirShares_UI_INTERFACE_H
+#ifndef NoirTokens_UI_INTERFACE_H
+#define NoirTokens_UI_INTERFACE_H
 
 #include <string>
 #include "util.h" // for int64

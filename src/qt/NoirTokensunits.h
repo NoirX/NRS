@@ -1,18 +1,18 @@
-#ifndef NoirSharesUNITS_H
-#define NoirSharesUNITS_H
+#ifndef NoirTokensUNITS_H
+#define NoirTokensUNITS_H
 
 #include <QString>
 #include <QAbstractListModel>
 
-/** NoirShares unit definitions. Encapsulates parsing and formatting
+/** NoirTokens unit definitions. Encapsulates parsing and formatting
    and serves as list model for drop-down selection boxes.
 */
-class NoirSharesUnits: public QAbstractListModel
+class NoirTokensUnits: public QAbstractListModel
 {
 public:
-    explicit NoirSharesUnits(QObject *parent);
+    explicit NoirTokensUnits(QObject *parent);
 
-    /** NoirShares units.
+    /** NoirTokens units.
       @note Source: https://en.bitcoin.it/wiki/Units . Please add only sensible ones
      */
     enum Unit
@@ -59,8 +59,8 @@ public:
     QVariant data(const QModelIndex &index, int role) const;
     ///@}
 private:
-    QList<NoirSharesUnits::Unit> unitlist;
+    QList<NoirTokensUnits::Unit> unitlist;
 };
-typedef NoirSharesUnits::Unit NoirSharesUnit;
+typedef NoirTokensUnits::Unit NoirTokensUnit;
 
-#endif // NoirSharesUNITS_H
+#endif // NoirTokensUNITS_H

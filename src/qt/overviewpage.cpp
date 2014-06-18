@@ -2,7 +2,7 @@
 #include "ui_overviewpage.h"
 
 #include "walletmodel.h"
-#include "NoirSharesunits.h"
+#include "NoirTokensunits.h"
 #include "optionsmodel.h"
 #include "transactiontablemodel.h"
 #include "transactionfilterproxy.h"
@@ -19,7 +19,7 @@ class TxViewDelegate : public QAbstractItemDelegate
 {
     Q_OBJECT
 public:
-    TxViewDelegate(): QAbstractItemDelegate(), unit(NoirSharesUnits::BTC)
+    TxViewDelegate(): QAbstractItemDelegate(), unit(NoirTokensUnits::BTC)
     {
 
     }
@@ -67,7 +67,7 @@ public:
             foreground = COLOR_CONFIRMED;
         }
         painter->setPen(foreground);
-        QString amountText = NoirSharesUnits::formatWithUnit(unit, amount, true);
+        QString amountText = NoirTokensUnits::formatWithUnit(unit, amount, true);
         if(!confirmed)
         {
             amountText = QString("[") + amountText + QString("]");
@@ -116,7 +116,7 @@ OverviewPage::OverviewPage(QWidget *parent) :
 
     QPalette  p;
     p.setColor(QPalette::WindowText,Qt::red);
-    ui->label_NoirShares_Intro->setPalette(p);
+    ui->label_NoirTokens_Intro->setPalette(p);
 
 
     // start with displaying the "out of sync" warnings
@@ -141,10 +141,10 @@ void OverviewPage::setBalance(qint64 balance, qint64 stake, qint64 unconfirmedBa
     currentStake = stake;
     currentUnconfirmedBalance = unconfirmedBalance;
     currentImmatureBalance = immatureBalance;
-    ui->labelBalance->setText(NoirSharesUnits::formatWithUnit(unit, balance));
-    ui->labelStake->setText(NoirSharesUnits::formatWithUnit(unit, stake));
-    ui->labelUnconfirmed->setText(NoirSharesUnits::formatWithUnit(unit, unconfirmedBalance));
-    ui->labelImmature->setText(NoirSharesUnits::formatWithUnit(unit, immatureBalance));
+    ui->labelBalance->setText(NoirTokensUnits::formatWithUnit(unit, balance));
+    ui->labelStake->setText(NoirTokensUnits::formatWithUnit(unit, stake));
+    ui->labelUnconfirmed->setText(NoirTokensUnits::formatWithUnit(unit, unconfirmedBalance));
+    ui->labelImmature->setText(NoirTokensUnits::formatWithUnit(unit, immatureBalance));
 
     // only show immature (newly mined) balance if it's non-zero, so as not to complicate things
     // for the non-mining users

@@ -1,6 +1,6 @@
-#include "NoirSharesamountfield.h"
+#include "NoirTokensamountfield.h"
 #include "qvaluecombobox.h"
-#include "NoirSharesunits.h"
+#include "NoirTokensunits.h"
 
 #include "guiconstants.h"
 
@@ -14,7 +14,7 @@
 #include <QApplication>
 #include <qmath.h>
 
-NoirSharesAmountField::NoirSharesAmountField(QWidget *parent):
+NoirTokensAmountField::NoirTokensAmountField(QWidget *parent):
         QWidget(parent), amount(0), currentUnit(-1)
 {
     amount = new QDoubleSpinBox(this);
@@ -29,7 +29,7 @@ NoirSharesAmountField::NoirSharesAmountField(QWidget *parent):
     QHBoxLayout *layout = new QHBoxLayout(this);
     layout->addWidget(amount);
     unit = new QValueComboBox(this);
-    unit->setModel(new NoirSharesUnits(this));
+    unit->setModel(new NoirTokensUnits(this));
     layout->addWidget(unit);
     layout->addStretch(1);
     layout->setContentsMargins(0,0,0,0);
@@ -47,7 +47,7 @@ NoirSharesAmountField::NoirSharesAmountField(QWidget *parent):
     unitChanged(unit->currentIndex());
 }
 
-void NoirSharesAmountField::setText(const QString &text)
+void NoirTokensAmountField::setText(const QString &text)
 {
     if (text.isEmpty())
         amount->clear();
@@ -55,18 +55,18 @@ void NoirSharesAmountField::setText(const QString &text)
         amount->setValue(text.toDouble());
 }
 
-void NoirSharesAmountField::clear()
+void NoirTokensAmountField::clear()
 {
     amount->clear();
     unit->setCurrentIndex(0);
 }
 
-bool NoirSharesAmountField::validate()
+bool NoirTokensAmountField::validate()
 {
     bool valid = true;
     if (amount->value() == 0.0)
         valid = false;
-    if (valid && !NoirSharesUnits::parse(currentUnit, text(), 0))
+    if (valid && !NoirTokensUnits::parse(currentUnit, text(), 0))
         valid = false;
 
     setValid(valid);
@@ -74,7 +74,7 @@ bool NoirSharesAmountField::validate()
     return valid;
 }
 
-void NoirSharesAmountField::setValid(bool valid)
+void NoirTokensAmountField::setValid(bool valid)
 {
     if (valid)
         amount->setStyleSheet("color:white;border-color:white;"
@@ -84,7 +84,7 @@ void NoirSharesAmountField::setValid(bool valid)
                               "background-color:#222222;border-width:1px;");
 }
 
-QString NoirSharesAmountField::text() const
+QString NoirTokensAmountField::text() const
 {
     if (amount->text().isEmpty())
         return QString();
@@ -92,7 +92,7 @@ QString NoirSharesAmountField::text() const
         return amount->text();
 }
 
-bool NoirSharesAmountField::eventFilter(QObject *object, QEvent *event)
+bool NoirTokensAmountField::eventFilter(QObject *object, QEvent *event)
 {
     if (event->type() == QEvent::FocusIn)
     {
@@ -113,16 +113,16 @@ bool NoirSharesAmountField::eventFilter(QObject *object, QEvent *event)
     return QWidget::eventFilter(object, event);
 }
 
-QWidget *NoirSharesAmountField::setupTabChain(QWidget *prev)
+QWidget *NoirTokensAmountField::setupTabChain(QWidget *prev)
 {
     QWidget::setTabOrder(prev, amount);
     return amount;
 }
 
-qint64 NoirSharesAmountField::value(bool *valid_out) const
+qint64 NoirTokensAmountField::value(bool *valid_out) const
 {
     qint64 val_out = 0;
-    bool valid = NoirSharesUnits::parse(currentUnit, text(), &val_out);
+    bool valid = NoirTokensUnits::parse(currentUnit, text(), &val_out);
     if(valid_out)
     {
         *valid_out = valid;
@@ -130,18 +130,18 @@ qint64 NoirSharesAmountField::value(bool *valid_out) const
     return val_out;
 }
 
-void NoirSharesAmountField::setValue(qint64 value)
+void NoirTokensAmountField::setValue(qint64 value)
 {
-    setText(NoirSharesUnits::format(currentUnit, value));
+    setText(NoirTokensUnits::format(currentUnit, value));
 }
 
-void NoirSharesAmountField::unitChanged(int idx)
+void NoirTokensAmountField::unitChanged(int idx)
 {
     // Use description tooltip for current unit for the combobox
     unit->setToolTip(unit->itemData(idx, Qt::ToolTipRole).toString());
 
     // Determine new unit ID
-    int newUnit = unit->itemData(idx, NoirSharesUnits::UnitRole).toInt();
+    int newUnit = unit->itemData(idx, NoirTokensUnits::UnitRole).toInt();
 
     // Parse current value and convert to new unit
     bool valid = false;
@@ -150,8 +150,8 @@ void NoirSharesAmountField::unitChanged(int idx)
     currentUnit = newUnit;
 
     // Set max length after retrieving the value, to prevent truncation
-    amount->setDecimals(NoirSharesUnits::decimals(currentUnit));
-    amount->setMaximum(qPow(10, NoirSharesUnits::amountDigits(currentUnit)) - qPow(10, -amount->decimals()));
+    amount->setDecimals(NoirTokensUnits::decimals(currentUnit));
+    amount->setMaximum(qPow(10, NoirTokensUnits::amountDigits(currentUnit)) - qPow(10, -amount->decimals()));
 
     if(valid)
     {
@@ -166,7 +166,7 @@ void NoirSharesAmountField::unitChanged(int idx)
     setValid(true);
 }
 
-void NoirSharesAmountField::setDisplayUnit(int newUnit)
+void NoirTokensAmountField::setDisplayUnit(int newUnit)
 {
     unit->setValue(newUnit);
 }

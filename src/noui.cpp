@@ -1,10 +1,10 @@
 // Copyright (c) 2010 Satoshi Nakamoto
-// Copyright (c) 2013  The NoirShares developer
+// Copyright (c) 2013  The NoirTokens developer
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 #include "ui_interface.h"
 #include "init.h"
-#include "NoirSharesrpc.h"
+#include "NoirTokensrpc.h"
 
 #include <string>
 
@@ -22,7 +22,7 @@ static bool noui_ThreadSafeAskFee(int64 nFeeRequired, const std::string& strCapt
 
 void noui_connect()
 {
-    // Connect NoirSharesd signal handlers
+    // Connect NoirTokensd signal handlers
     uiInterface.ThreadSafeMessageBox.connect(noui_ThreadSafeMessageBox);
     uiInterface.ThreadSafeAskFee.connect(noui_ThreadSafeAskFee);
 }

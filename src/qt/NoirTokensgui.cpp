@@ -1,10 +1,10 @@
 /*
- * Qt4 NoirShares GUI.
+ * Qt4 NoirTokens GUI.
  *
  * W.J. van der Laan 2011-2012
- * The NoirShares Developers 2011-2012
+ * The NoirTokens Developers 2011-2012
  */
-#include "NoirSharesgui.h"
+#include "NoirTokensgui.h"
 #include "transactiontablemodel.h"
 #include "addressbookpage.h"
 #include "sendcoinsdialog.h"
@@ -19,13 +19,13 @@
 #include "addresstablemodel.h"
 #include "transactionview.h"
 #include "overviewpage.h"
-#include "NoirSharesunits.h"
+#include "NoirTokensunits.h"
 #include "guiconstants.h"
 #include "askpassphrasedialog.h"
 #include "notificator.h"
 #include "guiutil.h"
 #include "rpcconsole.h"
-#include "NoirSharesrpc.h"
+#include "NoirTokensrpc.h"
 #include "init.h"
 
 #ifdef Q_OS_MAC
@@ -60,7 +60,7 @@
 
 #include <iostream>
 
-NoirSharesGUI::NoirSharesGUI(QWidget *parent):
+NoirTokensGUI::NoirTokensGUI(QWidget *parent):
     QMainWindow(parent),
     clientModel(0),
     walletModel(0),
@@ -72,7 +72,7 @@ NoirSharesGUI::NoirSharesGUI(QWidget *parent):
     rpcConsole(0)
 {
     resize(850, 550);
-    setWindowTitle(tr("NoirShares") + " - " + tr("Wallet"));
+    setWindowTitle(tr("NoirTokens") + " - " + tr("Wallet"));
 
 
     // QPalette pal = this->palette();
@@ -122,8 +122,8 @@ NoirSharesGUI::NoirSharesGUI(QWidget *parent):
 
 
 #ifndef Q_OS_MAC
-    qApp->setWindowIcon(QIcon(":icons/NoirShares"));
-    setWindowIcon(QIcon(":icons/NoirShares"));
+    qApp->setWindowIcon(QIcon(":icons/NoirTokens"));
+    setWindowIcon(QIcon(":icons/NoirTokens"));
 #else
     setUnifiedTitleAndToolBarOnMac(true);
     QApplication::setAttribute(Qt::AA_DontShowIconsInMenus);
@@ -234,7 +234,7 @@ NoirSharesGUI::NoirSharesGUI(QWidget *parent):
     gotoOverviewPage();
 }
 
-NoirSharesGUI::~NoirSharesGUI()
+NoirTokensGUI::~NoirTokensGUI()
 {
     if(trayIcon) // Hide tray icon, as deleting will let it linger until quit (on Ubuntu)
         trayIcon->hide();
@@ -243,7 +243,7 @@ NoirSharesGUI::~NoirSharesGUI()
 #endif
 }
 
-void NoirSharesGUI::createActions()
+void NoirTokensGUI::createActions()
 {
     QActionGroup *tabGroup = new QActionGroup(this);
 
@@ -254,7 +254,7 @@ void NoirSharesGUI::createActions()
     tabGroup->addAction(overviewAction);
 
     sendCoinsAction = new QAction(QIcon(":/icons/send"), tr("&Send coins"), this);
-    sendCoinsAction->setToolTip(tr("Send coins to a NoirShares address"));
+    sendCoinsAction->setToolTip(tr("Send coins to a NoirTokens address"));
     sendCoinsAction->setCheckable(true);
     sendCoinsAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_2));
     tabGroup->addAction(sendCoinsAction);
@@ -292,16 +292,16 @@ void NoirSharesGUI::createActions()
     quitAction->setToolTip(tr("Quit application"));
     quitAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Q));
     quitAction->setMenuRole(QAction::QuitRole);
-    aboutAction = new QAction(QIcon(":/icons/NoirShares"), tr("&About NoirShares"), this);
-    aboutAction->setToolTip(tr("Show information about NoirShares"));
+    aboutAction = new QAction(QIcon(":/icons/NoirTokens"), tr("&About NoirTokens"), this);
+    aboutAction->setToolTip(tr("Show information about NoirTokens"));
     aboutAction->setMenuRole(QAction::AboutRole);
     aboutQtAction = new QAction(QIcon(":/trolltech/qmessagebox/images/qtlogo-64.png"), tr("About &Qt"), this);
     aboutQtAction->setToolTip(tr("Show information about Qt"));
     aboutQtAction->setMenuRole(QAction::AboutQtRole);
     optionsAction = new QAction(QIcon(":/icons/options"), tr("&Options..."), this);
-    optionsAction->setToolTip(tr("Modify configuration options for NoirShares"));
+    optionsAction->setToolTip(tr("Modify configuration options for NoirTokens"));
     optionsAction->setMenuRole(QAction::PreferencesRole);
-    toggleHideAction = new QAction(QIcon(":/icons/NoirShares"), tr("&Show / Hide"), this);
+    toggleHideAction = new QAction(QIcon(":/icons/NoirTokens"), tr("&Show / Hide"), this);
     encryptWalletAction = new QAction(QIcon(":/icons/lock_closed"), tr("&Encrypt Wallet..."), this);
     encryptWalletAction->setToolTip(tr("Encrypt or decrypt wallet"));
     encryptWalletAction->setCheckable(true);
@@ -329,7 +329,7 @@ void NoirSharesGUI::createActions()
     connect(verifyMessageAction, SIGNAL(triggered()), this, SLOT(gotoVerifyMessageTab()));
 }
 
-void NoirSharesGUI::createMenuBar()
+void NoirTokensGUI::createMenuBar()
 {
 #ifdef Q_OS_MAC
     // Create a decoupled menu bar on Mac which stays even if the window is closed
@@ -361,7 +361,7 @@ void NoirSharesGUI::createMenuBar()
     help->addAction(aboutQtAction);
 }
 
-void NoirSharesGUI::createToolBars()
+void NoirTokensGUI::createToolBars()
 {
     QToolBar *toolbar = addToolBar(tr("Tabs toolbar"));
     toolbar->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
@@ -376,7 +376,7 @@ void NoirSharesGUI::createToolBars()
     toolbar2->addAction(exportAction);
 }
 
-void NoirSharesGUI::setClientModel(ClientModel *clientModel)
+void NoirTokensGUI::setClientModel(ClientModel *clientModel)
 {
     this->clientModel = clientModel;
     if(clientModel)
@@ -386,14 +386,14 @@ void NoirSharesGUI::setClientModel(ClientModel *clientModel)
         {
             setWindowTitle(windowTitle() + QString(" ") + tr("[testnet]"));
 #ifndef Q_OS_MAC
-            qApp->setWindowIcon(QIcon(":icons/NoirShares_testnet"));
-            setWindowIcon(QIcon(":icons/NoirShares_testnet"));
+            qApp->setWindowIcon(QIcon(":icons/NoirTokens_testnet"));
+            setWindowIcon(QIcon(":icons/NoirTokens_testnet"));
 #else
-            MacDockIconHandler::instance()->setIcon(QIcon(":icons/NoirShares_testnet"));
+            MacDockIconHandler::instance()->setIcon(QIcon(":icons/NoirTokens_testnet"));
 #endif
             if(trayIcon)
             {
-                trayIcon->setToolTip(tr("NoirShares client") + QString(" ") + tr("[testnet]"));
+                trayIcon->setToolTip(tr("NoirTokens client") + QString(" ") + tr("[testnet]"));
                 trayIcon->setIcon(QIcon(":/icons/toolbar_testnet"));
                 toggleHideAction->setIcon(QIcon(":/icons/toolbar_testnet"));
             }
@@ -417,7 +417,7 @@ void NoirSharesGUI::setClientModel(ClientModel *clientModel)
     }
 }
 
-void NoirSharesGUI::setWalletModel(WalletModel *walletModel)
+void NoirTokensGUI::setWalletModel(WalletModel *walletModel)
 {
     this->walletModel = walletModel;
     if(walletModel)
@@ -446,14 +446,14 @@ void NoirSharesGUI::setWalletModel(WalletModel *walletModel)
     }
 }
 
-void NoirSharesGUI::createTrayIcon()
+void NoirTokensGUI::createTrayIcon()
 {
     QMenu *trayIconMenu;
 #ifndef Q_OS_MAC
     trayIcon = new QSystemTrayIcon(this);
     trayIconMenu = new QMenu(this);
     trayIcon->setContextMenu(trayIconMenu);
-    trayIcon->setToolTip(tr("NoirShares client"));
+    trayIcon->setToolTip(tr("NoirTokens client"));
     trayIcon->setIcon(QIcon(":/icons/toolbar"));
     connect(trayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
             this, SLOT(trayIconActivated(QSystemTrayIcon::ActivationReason)));
@@ -484,7 +484,7 @@ void NoirSharesGUI::createTrayIcon()
 }
 
 #ifndef Q_OS_MAC
-void NoirSharesGUI::trayIconActivated(QSystemTrayIcon::ActivationReason reason)
+void NoirTokensGUI::trayIconActivated(QSystemTrayIcon::ActivationReason reason)
 {
     if(reason == QSystemTrayIcon::Trigger)
     {
@@ -494,7 +494,7 @@ void NoirSharesGUI::trayIconActivated(QSystemTrayIcon::ActivationReason reason)
 }
 #endif
 
-void NoirSharesGUI::optionsClicked()
+void NoirTokensGUI::optionsClicked()
 {
     if(!clientModel || !clientModel->getOptionsModel())
         return;
@@ -503,14 +503,14 @@ void NoirSharesGUI::optionsClicked()
     dlg.exec();
 }
 
-void NoirSharesGUI::aboutClicked()
+void NoirTokensGUI::aboutClicked()
 {
     AboutDialog dlg;
     dlg.setModel(clientModel);
     dlg.exec();
 }
 
-void NoirSharesGUI::setNumConnections(int count)
+void NoirTokensGUI::setNumConnections(int count)
 {
     QString icon;
     switch(count)
@@ -522,10 +522,10 @@ void NoirSharesGUI::setNumConnections(int count)
     default: icon = ":/icons/connect_4"; break;
     }
     labelConnectionsIcon->setPixmap(QIcon(icon).pixmap(STATUSBAR_ICONSIZE,STATUSBAR_ICONSIZE));
-    labelConnectionsIcon->setToolTip(tr("%n active connection(s) to NoirShares network", "", count));
+    labelConnectionsIcon->setToolTip(tr("%n active connection(s) to NoirTokens network", "", count));
 }
 
-void NoirSharesGUI::setNumBlocks(int count, int nTotalBlocks)
+void NoirTokensGUI::setNumBlocks(int count, int nTotalBlocks)
 {
     // don't show / hide progress bar and its label if we have no connection to the network
     if (!clientModel || clientModel->getNumConnections() == 0)
@@ -632,7 +632,7 @@ void NoirSharesGUI::setNumBlocks(int count, int nTotalBlocks)
     progressBar->setToolTip(tooltip);
 }
 
-void NoirSharesGUI::error(const QString &title, const QString &message, bool modal)
+void NoirTokensGUI::error(const QString &title, const QString &message, bool modal)
 {
     // Report errors from network/worker thread
     if(modal)
@@ -643,7 +643,7 @@ void NoirSharesGUI::error(const QString &title, const QString &message, bool mod
     }
 }
 
-void NoirSharesGUI::changeEvent(QEvent *e)
+void NoirTokensGUI::changeEvent(QEvent *e)
 {
     QMainWindow::changeEvent(e);
 #ifndef Q_OS_MAC // Ignored on Mac
@@ -662,7 +662,7 @@ void NoirSharesGUI::changeEvent(QEvent *e)
 #endif
 }
 
-void NoirSharesGUI::closeEvent(QCloseEvent *event)
+void NoirTokensGUI::closeEvent(QCloseEvent *event)
 {
     if(clientModel)
     {
@@ -677,20 +677,20 @@ void NoirSharesGUI::closeEvent(QCloseEvent *event)
     QMainWindow::closeEvent(event);
 }
 
-void NoirSharesGUI::askFee(qint64 nFeeRequired, bool *payFee)
+void NoirTokensGUI::askFee(qint64 nFeeRequired, bool *payFee)
 {
     QString strMessage =
         tr("This transaction is over the size limit.  You can still send it for a fee of %1, "
           "which goes to the nodes that process your transaction and helps to support the network.  "
           "Do you want to pay the fee?").arg(
-                NoirSharesUnits::formatWithUnit(NoirSharesUnits::BTC, nFeeRequired));
+                NoirTokensUnits::formatWithUnit(NoirTokensUnits::BTC, nFeeRequired));
     QMessageBox::StandardButton retval = QMessageBox::question(
           this, tr("Confirm transaction fee"), strMessage,
           QMessageBox::Yes|QMessageBox::Cancel, QMessageBox::Yes);
     *payFee = (retval == QMessageBox::Yes);
 }
 
-void NoirSharesGUI::incomingTransaction(const QModelIndex & parent, int start, int end)
+void NoirTokensGUI::incomingTransaction(const QModelIndex & parent, int start, int end)
 {
     if(!walletModel || !clientModel)
         return;
@@ -719,13 +719,13 @@ void NoirSharesGUI::incomingTransaction(const QModelIndex & parent, int start, i
                                  "Type: %3\n"
                                  "Address: %4\n")
                               .arg(date)
-                              .arg(NoirSharesUnits::formatWithUnit(walletModel->getOptionsModel()->getDisplayUnit(), amount, true))
+                              .arg(NoirTokensUnits::formatWithUnit(walletModel->getOptionsModel()->getDisplayUnit(), amount, true))
                               .arg(type)
                               .arg(address), icon);
     }
 }
 
-void NoirSharesGUI::gotoOverviewPage()
+void NoirTokensGUI::gotoOverviewPage()
 {
     overviewAction->setChecked(true);
     centralWidget->setCurrentWidget(overviewPage);
@@ -734,7 +734,7 @@ void NoirSharesGUI::gotoOverviewPage()
     disconnect(exportAction, SIGNAL(triggered()), 0, 0);
 }
 
-void NoirSharesGUI::gotoHistoryPage()
+void NoirTokensGUI::gotoHistoryPage()
 {
     historyAction->setChecked(true);
     centralWidget->setCurrentWidget(transactionsPage);
@@ -744,7 +744,7 @@ void NoirSharesGUI::gotoHistoryPage()
     connect(exportAction, SIGNAL(triggered()), transactionView, SLOT(exportClicked()));
 }
 
-void NoirSharesGUI::gotoAddressBookPage()
+void NoirTokensGUI::gotoAddressBookPage()
 {
     addressBookAction->setChecked(true);
     centralWidget->setCurrentWidget(addressBookPage);
@@ -754,7 +754,7 @@ void NoirSharesGUI::gotoAddressBookPage()
     connect(exportAction, SIGNAL(triggered()), addressBookPage, SLOT(exportClicked()));
 }
 
-void NoirSharesGUI::gotoReceiveCoinsPage()
+void NoirTokensGUI::gotoReceiveCoinsPage()
 {
     receiveCoinsAction->setChecked(true);
     centralWidget->setCurrentWidget(receiveCoinsPage);
@@ -764,7 +764,7 @@ void NoirSharesGUI::gotoReceiveCoinsPage()
     connect(exportAction, SIGNAL(triggered()), receiveCoinsPage, SLOT(exportClicked()));
 }
 
-void NoirSharesGUI::gotoSendCoinsPage()
+void NoirTokensGUI::gotoSendCoinsPage()
 {
     sendCoinsAction->setChecked(true);
     centralWidget->setCurrentWidget(sendCoinsPage);
@@ -773,7 +773,7 @@ void NoirSharesGUI::gotoSendCoinsPage()
     disconnect(exportAction, SIGNAL(triggered()), 0, 0);
 }
 
-void NoirSharesGUI::gotoSignMessageTab(QString addr)
+void NoirTokensGUI::gotoSignMessageTab(QString addr)
 {
     // call show() in showTab_SM()
     signVerifyMessageDialog->showTab_SM(true);
@@ -782,7 +782,7 @@ void NoirSharesGUI::gotoSignMessageTab(QString addr)
         signVerifyMessageDialog->setAddress_SM(addr);
 }
 
-void NoirSharesGUI::gotoVerifyMessageTab(QString addr)
+void NoirTokensGUI::gotoVerifyMessageTab(QString addr)
 {
     // call show() in showTab_VM()
     signVerifyMessageDialog->showTab_VM(true);
@@ -791,14 +791,14 @@ void NoirSharesGUI::gotoVerifyMessageTab(QString addr)
         signVerifyMessageDialog->setAddress_VM(addr);
 }
 
-void NoirSharesGUI::dragEnterEvent(QDragEnterEvent *event)
+void NoirTokensGUI::dragEnterEvent(QDragEnterEvent *event)
 {
     // Accept only URIs
     if(event->mimeData()->hasUrls())
         event->acceptProposedAction();
 }
 
-void NoirSharesGUI::dropEvent(QDropEvent *event)
+void NoirTokensGUI::dropEvent(QDropEvent *event)
 {
     if(event->mimeData()->hasUrls())
     {
@@ -814,13 +814,13 @@ void NoirSharesGUI::dropEvent(QDropEvent *event)
         if (nValidUrisFound)
             gotoSendCoinsPage();
         else
-            notificator->notify(Notificator::Warning, tr("URI handling"), tr("URI can not be parsed! This can be caused by an invalid NoirShares address or malformed URI parameters."));
+            notificator->notify(Notificator::Warning, tr("URI handling"), tr("URI can not be parsed! This can be caused by an invalid NoirTokens address or malformed URI parameters."));
     }
 
     event->acceptProposedAction();
 }
 
-void NoirSharesGUI::handleURI(QString strURI)
+void NoirTokensGUI::handleURI(QString strURI)
 {
     // URI has to be valid
     if (sendCoinsPage->handleURI(strURI))
@@ -829,10 +829,10 @@ void NoirSharesGUI::handleURI(QString strURI)
         gotoSendCoinsPage();
     }
     else
-        notificator->notify(Notificator::Warning, tr("URI handling"), tr("URI can not be parsed! This can be caused by an invalid NoirShares address or malformed URI parameters."));
+        notificator->notify(Notificator::Warning, tr("URI handling"), tr("URI can not be parsed! This can be caused by an invalid NoirTokens address or malformed URI parameters."));
 }
 
-void NoirSharesGUI::setEncryptionStatus(int status)
+void NoirTokensGUI::setEncryptionStatus(int status)
 {
     switch(status)
     {
@@ -861,7 +861,7 @@ void NoirSharesGUI::setEncryptionStatus(int status)
     }
 }
 
-void NoirSharesGUI::encryptWallet(bool status)
+void NoirTokensGUI::encryptWallet(bool status)
 {
     if(!walletModel)
         return;
@@ -873,7 +873,7 @@ void NoirSharesGUI::encryptWallet(bool status)
     setEncryptionStatus(walletModel->getEncryptionStatus());
 }
 
-void NoirSharesGUI::backupWallet()
+void NoirTokensGUI::backupWallet()
 {
     QString saveDir = QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation);
     QString filename = QFileDialog::getSaveFileName(this, tr("Backup Wallet"), saveDir, tr("Wallet Data (*.dat)"));
@@ -884,14 +884,14 @@ void NoirSharesGUI::backupWallet()
     }
 }
 
-void NoirSharesGUI::changePassphrase()
+void NoirTokensGUI::changePassphrase()
 {
     AskPassphraseDialog dlg(AskPassphraseDialog::ChangePass, this);
     dlg.setModel(walletModel);
     dlg.exec();
 }
 
-void NoirSharesGUI::unlockWallet()
+void NoirTokensGUI::unlockWallet()
 {
     if(!walletModel)
         return;
@@ -904,7 +904,7 @@ void NoirSharesGUI::unlockWallet()
     }
 }
 
-void NoirSharesGUI::showNormalIfMinimized(bool fToggleHidden)
+void NoirTokensGUI::showNormalIfMinimized(bool fToggleHidden)
 {
     // activateWindow() (sometimes) helps with keyboard focus on Windows
     if (isHidden())
@@ -926,7 +926,7 @@ void NoirSharesGUI::showNormalIfMinimized(bool fToggleHidden)
         hide();
 }
 
-void NoirSharesGUI::toggleHidden()
+void NoirTokensGUI::toggleHidden()
 {
     showNormalIfMinimized(true);
 }

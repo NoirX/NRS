@@ -1,5 +1,5 @@
-#ifndef NoirSharesGUI_H
-#define NoirSharesGUI_H
+#ifndef NoirTokensGUI_H
+#define NoirTokensGUI_H
 
 #include <QMainWindow>
 #include <QSystemTrayIcon>
@@ -27,22 +27,22 @@ class QUrl;
 QT_END_NAMESPACE
 
 /**
-  NoirShares GUI main class. This class represents the main window of the NoirShares UI. It communicates with both the client and
+  NoirTokens GUI main class. This class represents the main window of the NoirTokens UI. It communicates with both the client and
   wallet models to give the user an up-to-date view of the current core state.
 */
-class NoirSharesGUI : public QMainWindow
+class NoirTokensGUI : public QMainWindow
 {
     Q_OBJECT
 public:
-    explicit NoirSharesGUI(QWidget *parent = 0);
-    ~NoirSharesGUI();
+    explicit NoirTokensGUI(QWidget *parent = 0);
+    ~NoirTokensGUI();
 
     /** Set the client model.
         The client model represents the part of the core that communicates with the P2P network, and is wallet-agnostic.
     */
     void setClientModel(ClientModel *clientModel);
     /** Set the wallet model.
-        The wallet model represents a NoirShares wallet, and offers access to the list of transactions, address book and sending
+        The wallet model represents a NoirTokens wallet, and offers access to the list of transactions, address book and sending
         functionality.
     */
     void setWalletModel(WalletModel *walletModel);

@@ -140,7 +140,7 @@
          </widget>
         </item>
         <item row="0" column="1">
-         <widget class="NoirSharesAmountField" name="lnReqAmount">
+         <widget class="NoirTokensAmountField" name="lnReqAmount">
           <property name="enabled">
            <bool>false</bool>
           </property>
@@ -185,9 +185,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>NoirSharesAmountField</class>
+   <class>NoirTokensAmountField</class>
    <extends>QSpinBox</extends>
-   <header>NoirSharesamountfield.h</header>
+   <header>NoirTokensamountfield.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

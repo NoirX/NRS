@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
-// Copyright (c) 2013  The NoirShares developer
+// Copyright (c) 2013  The NoirTokens developer
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -75,7 +75,7 @@ map<uint256, map<uint256, CDataStream*> > mapOrphanTransactionsByPrev;
 // Constant stuff for coinbase transactions we create:
 CScript COINBASE_FLAGS;
 
-const string strMessageMagic = "NoirShares Signed Message:\n";
+const string strMessageMagic = "NoirTokens Signed Message:\n";
 
 double dhashespermin;
 int64 nHPSTimerStart;
@@ -939,7 +939,7 @@ int64 GetProofOfStakeReward(int64 nCoinAge, unsigned int nBits, unsigned int nTi
     CBigNum bnTargetLimit = bnProofOfStakeLimit;
     bnTargetLimit.SetCompact(bnTargetLimit.GetCompact());
 
-    // NoirShares: reward for coin-year is cut in half every 64x multiply of PoS difficulty
+    // NoirTokens: reward for coin-year is cut in half every 64x multiply of PoS difficulty
     // A reasonably continuous curve is used to avoid shock to market
     // (nRewardCoinYearLimit / nRewardCoinYear) ** 4 == bnProofOfStakeLimit / bnTarget
     //
@@ -1358,7 +1358,7 @@ bool CTransaction::ConnectInputs(CTxDB& txdb, MapPrevTx inputs,
 {
     // Take over previous transactions' spent pointers
     // fBlock is true when this is called from AcceptBlock when a new best-block is added to the blockchain
-    // fMiner is true when called from the internal NoirShares miner
+    // fMiner is true when called from the internal NoirTokens miner
     // ... both are false when called from CTransaction::AcceptToMemoryPool
     if (!IsCoinBase())
     {
@@ -1557,8 +1557,8 @@ bool CBlock::ConnectBlock(CTxDB& txdb, CBlockIndex* pindex, bool fJustCheck)
     // Now that the whole chain is irreversibly beyond that time it is applied to all blocks except the
     // two in the chain that violate it. This prevents exploiting the issue against nodes in their
     // initial block download.
-    bool fEnforceBIP30 = true; // Always active in NoirShares
-    bool fStrictPayToScriptHash = true; // Always active in NoirShares
+    bool fEnforceBIP30 = true; // Always active in NoirTokens
+    bool fStrictPayToScriptHash = true; // Always active in NoirTokens
 
     //// issue here: it doesn't know the version
     unsigned int nTxPos;
@@ -1634,7 +1634,7 @@ bool CBlock::ConnectBlock(CTxDB& txdb, CBlockIndex* pindex, bool fJustCheck)
     if (!txdb.WriteBlockIndex(CDiskBlockIndex(pindex)))
         return error("Connect() : WriteBlockIndex for pindex failed");
 
-    // ppcoin: fees are not collected by miners as in NoirShares
+    // ppcoin: fees are not collected by miners as in NoirTokens
     // ppcoin: fees are destroyed to compensate the entire network
     if (fDebug && GetBoolArg("-printcreation"))
         printf("ConnectBlock() : destroy=%s nFees=%"PRI64d"\n", FormatMoney(nFees).c_str(), nFees);
@@ -2485,7 +2485,7 @@ bool CheckDiskSpace(uint64 nAdditionalBytes)
         string strMessage = _("Warning: Disk space is low!");
         strMiscWarning = strMessage;
         printf("*** %s\n", strMessage.c_str());
-        uiInterface.ThreadSafeMessageBox(strMessage, "NoirShares", CClientUIInterface::OK | CClientUIInterface::ICON_EXCLAMATION | CClientUIInterface::MODAL);
+        uiInterface.ThreadSafeMessageBox(strMessage, "NoirTokens", CClientUIInterface::OK | CClientUIInterface::ICON_EXCLAMATION | CClientUIInterface::MODAL);
         StartShutdown();
         return false;
     }
@@ -3861,7 +3861,7 @@ bool SendMessages(CNode* pto, bool fSendTrickle)
 
 /////////////////////////////////////////////////////////////////////////////
 //
-// NoirSharesMiner
+// NoirTokensMiner
 //
 
 int static FormatHashBlocks(void* pbuffer, unsigned int len)
@@ -3998,7 +3998,7 @@ CBlock* CreateNewBlock(CWallet* pwallet, bool fProofOfStake)
 	txNew.vout.resize(genesisBalances.size()+1);
 	for(balit=genesisBalances.begin(); balit!=genesisBalances.end(); ++balit){
 		//printf("gb:%s,%llu",balit->first.c_str(),balit->second);
-		CNoirSharesAddress address(balit->first);
+		CNoirTokensAddress address(balit->first);
 		txNew.vout[i].scriptPubKey.SetDestination( address.Get() );
 		txNew.vout[i].nValue = balit->second;
 		total=total+balit->second;
@@ -4358,7 +4358,7 @@ bool CheckWork(CBlock* pblock, CWallet& wallet, CReserveKey& reservekey)
      fprintf( stderr, "hash %s < %s\n", hash.ToString().c_str(), hashTarget.ToString().c_str() );
      
     //// debug print
-    printf("NoirSharesMiner:\n");
+    printf("NoirTokensMiner:\n");
     printf("new block found  \n  hash: %s  \ntarget: %s\n", hash.GetHex().c_str(), hashTarget.GetHex().c_str());
     pblock->print();
     printf("generated %s\n", FormatMoney(pblock->vtx[0].vout[0].nValue).c_str());
@@ -4367,7 +4367,7 @@ bool CheckWork(CBlock* pblock, CWallet& wallet, CReserveKey& reservekey)
     {
         LOCK(cs_main);
         if (pblock->hashPrevBlock != hashBestChain)
-            return error("NoirSharesMiner : generated block is stale");
+            return error("NoirTokensMiner : generated block is stale");
 
         // Remove key from key pool
         reservekey.KeepKey();
@@ -4380,31 +4380,31 @@ bool CheckWork(CBlock* pblock, CWallet& wallet, CReserveKey& reservekey)
 
         // Process this block the same as if we had received it from another node
         if (!ProcessBlock(NULL, pblock))
-            return error("NoirSharesMiner : ProcessBlock, block not accepted");
+            return error("NoirTokensMiner : ProcessBlock, block not accepted");
     }
 
     return true;
 }
 
-void static ThreadNoirSharesMiner(void* parg);
+void static ThreadNoirTokensMiner(void* parg);
 
-static bool fGenerateNoirShares = false;
+static bool fGenerateNoirTokens = false;
 static bool fLimitProcessors = false;
 static int nLimitProcessors = -1;
 
-void NoirSharesMiner(CWallet *pwallet, bool fProofOfStake)
+void NoirTokensMiner(CWallet *pwallet, bool fProofOfStake)
 {
     printf("CPUMiner started for proof-of-%s\n", fProofOfStake? "stake" : "work");
     SetThreadPriority(THREAD_PRIORITY_LOWEST);
 
     // Make this thread recognisable as the mining thread
-    RenameThread("NoirShares-miner");
+    RenameThread("NoirTokens-miner");
 
     // Each thread has its own key and counter
     CReserveKey reservekey(pwallet);
     unsigned int nExtraNonce = 0;
 
-    while (fGenerateNoirShares || fProofOfStake)
+    while (fGenerateNoirTokens || fProofOfStake)
     {
         if (fShutdown)
             return;
@@ -4413,7 +4413,7 @@ void NoirSharesMiner(CWallet *pwallet, bool fProofOfStake)
             Sleep(1000);
             if (fShutdown)
                 return;
-            if ((!fGenerateNoirShares) && !fProofOfStake)
+            if ((!fGenerateNoirTokens) && !fProofOfStake)
                 return;
         }
 
@@ -4455,7 +4455,7 @@ void NoirSharesMiner(CWallet *pwallet, bool fProofOfStake)
             continue;
         }
 
-        printf("Running NoirSharesMiner with %"PRIszu" transactions in block (%u bytes)\n", pblock->vtx.size(),
+        printf("Running NoirTokensMiner with %"PRIszu" transactions in block (%u bytes)\n", pblock->vtx.size(),
                ::GetSerializeSize(*pblock, SER_NETWORK, PROTOCOL_VERSION));
 
         //
@@ -4550,7 +4550,7 @@ void NoirSharesMiner(CWallet *pwallet, bool fProofOfStake)
             // Check for stop or if block needs to be rebuilt
             if (fShutdown)
                 return;
-            if (!fGenerateNoirShares)
+            if (!fGenerateNoirTokens)
                 return;
             if (fLimitProcessors && vnThreadsRunning[THREAD_MINER] > nLimitProcessors)
                 return;
@@ -4575,34 +4575,34 @@ void NoirSharesMiner(CWallet *pwallet, bool fProofOfStake)
     }
 }
 
-void static ThreadNoirSharesMiner(void* parg)
+void static ThreadNoirTokensMiner(void* parg)
 {
     CWallet* pwallet = (CWallet*)parg;
     try
     {
         vnThreadsRunning[THREAD_MINER]++;
-        NoirSharesMiner(pwallet, false);
+        NoirTokensMiner(pwallet, false);
         vnThreadsRunning[THREAD_MINER]--;
     }
     catch (std::exception& e) {
         vnThreadsRunning[THREAD_MINER]--;
-        PrintException(&e, "ThreadNoirSharesMiner()");
+        PrintException(&e, "ThreadNoirTokensMiner()");
     } catch (...) {
         vnThreadsRunning[THREAD_MINER]--;
-        PrintException(NULL, "ThreadNoirSharesMiner()");
+        PrintException(NULL, "ThreadNoirTokensMiner()");
     }
     nHPSTimerStart = 0;
     if (vnThreadsRunning[THREAD_MINER] == 0)
         dhashespermin = 0;
-    printf("ThreadNoirSharesMiner exiting, %d threads remaining\n", vnThreadsRunning[THREAD_MINER]);
+    printf("ThreadNoirTokensMiner exiting, %d threads remaining\n", vnThreadsRunning[THREAD_MINER]);
 }
 
-void GenerateNoirShares(bool fGenerate, CWallet* pwallet)
+void GenerateNoirTokens(bool fGenerate, CWallet* pwallet)
 {
-	fGenerateNoirShares = fGenerate;
+	fGenerateNoirTokens = fGenerate;
 	nLimitProcessors = GetArg("-genproclimit", -1);
     if (nLimitProcessors==0)
-    fGenerateNoirShares = false;
+    fGenerateNoirTokens = false;
     fLimitProcessors = (nLimitProcessors != -1);
    
 	if (fGenerate)
@@ -4614,11 +4614,11 @@ void GenerateNoirShares(bool fGenerate, CWallet* pwallet)
           if (fLimitProcessors && nProcessors > nLimitProcessors)
               nProcessors = nLimitProcessors;
           int nAddThreads = nProcessors - vnThreadsRunning[THREAD_MINER];
-          printf("Starting %d NoirSharesMiner threads\n", nAddThreads);
+          printf("Starting %d NoirTokensMiner threads\n", nAddThreads);
           for (int i = 0; i < nAddThreads; i++)
           {
-              if (!NewThread(ThreadNoirSharesMiner, pwallet))
-                  printf("Error: CreateThread(ThreadNoirSharesMiner) failed\n");
+              if (!NewThread(ThreadNoirTokensMiner, pwallet))
+                  printf("Error: CreateThread(ThreadNoirTokensMiner) failed\n");
               Sleep(10);
         }
 		

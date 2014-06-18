@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>About NoirShares</string>
+   <string>About NoirTokens</string>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout_2">
    <item>
@@ -23,7 +23,7 @@
       </sizepolicy>
      </property>
      <property name="pixmap">
-      <pixmap resource="../NoirShares.qrc">:/images/about</pixmap>
+      <pixmap resource="../NoirTokens.qrc">:/images/about</pixmap>
      </property>
     </widget>
    </item>
@@ -50,7 +50,7 @@
           <cursorShape>IBeamCursor</cursorShape>
          </property>
          <property name="text">
-          <string>&lt;b&gt;NoirShares&lt;/b&gt; version</string>
+          <string>&lt;b&gt;NoirTokens&lt;/b&gt; version</string>
          </property>
          <property name="textInteractionFlags">
           <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
@@ -148,7 +148,7 @@ This product includes software developed by the OpenSSL Project for use in the O
   </layout>
  </widget>
  <resources>
-  <include location="../NoirShares.qrc"/>
+  <include location="../NoirTokens.qrc"/>
  </resources>
  <connections>
   <connection>

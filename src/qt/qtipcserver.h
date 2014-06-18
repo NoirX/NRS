@@ -1,8 +1,8 @@
 #ifndef QTIPCSERVER_H
 #define QTIPCSERVER_H
 
-// Define NoirShares-Qt message queue name
-#define NoirSharesURI_QUEUE_NAME "NoirSharesURI"
+// Define NoirTokens-Qt message queue name
+#define NoirTokensURI_QUEUE_NAME "NoirTokensURI"
 
 void ipcScanRelay(int argc, char *argv[]);
 void ipcInit(int argc, char *argv[]);

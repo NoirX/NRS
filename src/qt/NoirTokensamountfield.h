@@ -1,5 +1,5 @@
-#ifndef NoirSharesFIELD_H
-#define NoirSharesFIELD_H
+#ifndef NoirTokensFIELD_H
+#define NoirTokensFIELD_H
 
 #include <QWidget>
 
@@ -8,14 +8,14 @@ class QDoubleSpinBox;
 class QValueComboBox;
 QT_END_NAMESPACE
 
-/** Widget for entering NoirShares amounts.
+/** Widget for entering NoirTokens amounts.
   */
-class NoirSharesAmountField: public QWidget
+class NoirTokensAmountField: public QWidget
 {
     Q_OBJECT
     Q_PROPERTY(qint64 value READ value WRITE setValue NOTIFY textChanged USER true)
 public:
-    explicit NoirSharesAmountField(QWidget *parent = 0);
+    explicit NoirTokensAmountField(QWidget *parent = 0);
 
     qint64 value(bool *valid=0) const;
     void setValue(qint64 value);
@@ -57,4 +57,4 @@ private slots:
 };
 
 
-#endif // NoirSharesFIELD_H
+#endif // NoirTokensFIELD_H

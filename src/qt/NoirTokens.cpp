@@ -1,7 +1,7 @@
 /*
  * W.J. van der Laan 2011-2012
  */
-#include "NoirSharesgui.h"
+#include "NoirTokensgui.h"
 #include "clientmodel.h"
 #include "walletmodel.h"
 #include "optionsmodel.h"
@@ -22,8 +22,8 @@
 // #include <QFile>
 // #include <QPalette>
 
-#if defined(NoirShares_NEED_QT_PLUGINS) && !defined(_NoirShares_QT_PLUGINS_INCLUDED)
-#define _NoirShares_QT_PLUGINS_INCLUDED
+#if defined(NoirTokens_NEED_QT_PLUGINS) && !defined(_NoirTokens_QT_PLUGINS_INCLUDED)
+#define _NoirTokens_QT_PLUGINS_INCLUDED
 #define __INSURE__
 #include <QtPlugin>
 Q_IMPORT_PLUGIN(qcncodecs)
@@ -34,7 +34,7 @@ Q_IMPORT_PLUGIN(qtaccessiblewidgets)
 #endif
 
 // Need a global reference for the notifications to find the GUI
-static NoirSharesGUI *guiref;
+static NoirTokensGUI *guiref;
 static QSplashScreen *splashref;
 
 static void ThreadSafeMessageBox(const std::string& message, const std::string& caption, int style)
@@ -100,7 +100,7 @@ static void QueueShutdown()
  */
 static std::string Translate(const char* psz)
 {
-    return QCoreApplication::translate("NoirShares-core", psz).toStdString();
+    return QCoreApplication::translate("NoirTokens-core", psz).toStdString();
 }
 
 /* Handle runaway exceptions. Shows a message box with the problem and quits the program.
@@ -108,11 +108,11 @@ static std::string Translate(const char* psz)
 static void handleRunawayException(std::exception *e)
 {
     PrintExceptionContinue(e, "Runaway exception");
-    QMessageBox::critical(0, "Runaway exception", NoirSharesGUI::tr("A fatal error occurred. NoirShares can no longer continue safely and will quit.") + QString("\n\n") + QString::fromStdString(strMiscWarning));
+    QMessageBox::critical(0, "Runaway exception", NoirTokensGUI::tr("A fatal error occurred. NoirTokens can no longer continue safely and will quit.") + QString("\n\n") + QString::fromStdString(strMiscWarning));
     exit(1);
 }
 
-#ifndef NoirShares_QT_TEST
+#ifndef NoirTokens_QT_TEST
 int main(int argc, char *argv[])
 {
     // Do this early as we don't want to bother initializing if we are just calling IPC
@@ -122,7 +122,7 @@ int main(int argc, char *argv[])
     //QTextCodec::setCodecForTr(QTextCodec::codecForName("UTF-8"));
     //QTextCodec::setCodecForCStrings(QTextCodec::codecForTr());
 
-    Q_INIT_RESOURCE(NoirShares);
+    Q_INIT_RESOURCE(NoirTokens);
     QApplication app(argc, argv);
 
     // style the app
@@ -141,12 +141,12 @@ int main(int argc, char *argv[])
     // Command-line options take precedence:
     ParseParameters(argc, argv);
 
-    // ... then NoirShares.conf:
+    // ... then NoirTokens.conf:
     if (!boost::filesystem::is_directory(GetDataDir(false)))
     {
         // This message can not be translated, as translation is not initialized yet
-        // (which not yet possible because lang=XX can be overridden in NoirShares.conf in the data directory)
-        QMessageBox::critical(0, "NoirShares",
+        // (which not yet possible because lang=XX can be overridden in NoirTokens.conf in the data directory)
+        QMessageBox::critical(0, "NoirTokens",
                               QString("Error: Specified data directory \"%1\" does not exist.").arg(QString::fromStdString(mapArgs["-datadir"])));
         return 1;
     }
@@ -154,12 +154,12 @@ int main(int argc, char *argv[])
 
     // Application identification (must be set before OptionsModel is initialized,
     // as it is used to locate QSettings)
-    app.setOrganizationName("NoirShares");
-    app.setOrganizationDomain("NoirShares.su");
+    app.setOrganizationName("NoirTokens");
+    app.setOrganizationDomain("NoirTokens.su");
     if(GetBoolArg("-testnet")) // Separate UI settings for testnet
-        app.setApplicationName("NoirShares-Qt-testnet");
+        app.setApplicationName("NoirTokens-Qt-testnet");
     else
-        app.setApplicationName("NoirShares-Qt");
+        app.setApplicationName("NoirTokens-Qt");
 
     // ... then GUI settings:
     OptionsModel optionsModel;
@@ -183,11 +183,11 @@ int main(int argc, char *argv[])
     if (qtTranslator.load("qt_" + lang_territory, QLibraryInfo::location(QLibraryInfo::TranslationsPath)))
         app.installTranslator(&qtTranslator);
 
-    // Load e.g. NoirShares_de.qm (shortcut "de" needs to be defined in NoirShares.qrc)
+    // Load e.g. NoirTokens_de.qm (shortcut "de" needs to be defined in NoirTokens.qrc)
     if (translatorBase.load(lang, ":/translations/"))
         app.installTranslator(&translatorBase);
 
-    // Load e.g. NoirShares_de_DE.qm (shortcut "de_DE" needs to be defined in NoirShares.qrc)
+    // Load e.g. NoirTokens_de_DE.qm (shortcut "de_DE" needs to be defined in NoirTokens.qrc)
     if (translator.load(lang_territory, ":/translations/"))
         app.installTranslator(&translator);
 
@@ -226,7 +226,7 @@ int main(int argc, char *argv[])
         if (GUIUtil::GetStartOnSystemStartup())
             GUIUtil::SetStartOnSystemStartup(true);
 
-        NoirSharesGUI window;
+        NoirTokensGUI window;
         guiref = &window;
         if(AppInit2())
         {
@@ -265,7 +265,7 @@ int main(int argc, char *argv[])
                 window.setWalletModel(0);
                 guiref = 0;
             }
-            // Shutdown the core and its threads, but don't exit NoirShares-Qt here
+            // Shutdown the core and its threads, but don't exit NoirTokens-Qt here
             Shutdown(NULL);
         }
         else
@@ -279,4 +279,4 @@ int main(int argc, char *argv[])
     }
     return 0;
 }
-#endif // NoirShares_QT_TEST
+#endif // NoirTokens_QT_TEST

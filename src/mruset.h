@@ -1,8 +1,8 @@
-// Copyright (c) 2012 The NoirShares developers
+// Copyright (c) 2012 The NoirTokens developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
-#ifndef NoirShares_MRUSET_H
-#define NoirShares_MRUSET_H
+#ifndef NoirTokens_MRUSET_H
+#define NoirTokens_MRUSET_H
 
 #include <set>
 #include <deque>

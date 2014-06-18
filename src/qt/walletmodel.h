@@ -30,7 +30,7 @@ public:
     qint64 amount;
 };
 
-/** Interface to NoirShares wallet from Qt view code. */
+/** Interface to NoirTokens wallet from Qt view code. */
 class WalletModel : public QObject
 {
     Q_OBJECT

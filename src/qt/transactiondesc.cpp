@@ -1,7 +1,7 @@
 #include "transactiondesc.h"
 #include "transactionrecord.h"
 #include "guiutil.h"
-#include "NoirSharesunits.h"
+#include "NoirTokensunits.h"
 
 #include "main.h"
 #include "wallet.h"
@@ -23,7 +23,7 @@ QString TransactionDesc::FormatTxStatus(const CWalletTx& wtx)
         int nDepth = wtx.GetDepthInMainChain();
         if (GetAdjustedTime() - wtx.nTimeReceived > 2 * 60 && wtx.GetRequestCount() == 0)
             return tr("%1/offline").arg(nDepth);
-        // modified by NoirShares to adjust the confirm
+        // modified by NoirTokens to adjust the confirm
         else if (nDepth < TransactionRecord::NumConfirmations)
             return tr("%1/unconfirmed").arg(nDepth);
         else
@@ -87,7 +87,7 @@ QString TransactionDesc::toHTML(CWallet *wallet, CWalletTx &wtx)
                             {
                                 strHTML += "<b>" + tr("From") + ":</b> " + tr("unknown") + "<br>";
                                 strHTML += "<b>" + tr("To") + ":</b> ";
-                                strHTML += GUIUtil::HtmlEscape(CNoirSharesAddress(address).ToString());
+                                strHTML += GUIUtil::HtmlEscape(CNoirTokensAddress(address).ToString());
                                 if (!wallet->mapAddressBook[address].empty())
                                     strHTML += " (" + tr("own address") + ", " + tr("label") + ": " + GUIUtil::HtmlEscape(wallet->mapAddressBook[address]) + ")";
                                 else
@@ -109,7 +109,7 @@ QString TransactionDesc::toHTML(CWallet *wallet, CWalletTx &wtx)
             // Online transaction
             std::string strAddress = wtx.mapValue["to"];
             strHTML += "<b>" + tr("To") + ":</b> ";
-            CTxDestination dest = CNoirSharesAddress(strAddress).Get();
+            CTxDestination dest = CNoirTokensAddress(strAddress).Get();
             if (wallet->mapAddressBook.count(dest) && !wallet->mapAddressBook[dest].empty())
                 strHTML += GUIUtil::HtmlEscape(wallet->mapAddressBook[dest]) + " ";
             strHTML += GUIUtil::HtmlEscape(strAddress) + "<br>";
@@ -128,7 +128,7 @@ QString TransactionDesc::toHTML(CWallet *wallet, CWalletTx &wtx)
                 nUnmatured += wallet->GetCredit(txout);
             strHTML += "<b>" + tr("Credit") + ":</b> ";
             if (wtx.IsInMainChain())
-                strHTML += NoirSharesUnits::formatWithUnit(NoirSharesUnits::BTC, nUnmatured)+ " (" + tr("matures in %n more block(s)", "", wtx.GetBlocksToMaturity()) + ")";
+                strHTML += NoirTokensUnits::formatWithUnit(NoirTokensUnits::BTC, nUnmatured)+ " (" + tr("matures in %n more block(s)", "", wtx.GetBlocksToMaturity()) + ")";
             else
                 strHTML += "(" + tr("not accepted") + ")";
             strHTML += "<br>";
@@ -138,7 +138,7 @@ QString TransactionDesc::toHTML(CWallet *wallet, CWalletTx &wtx)
             //
             // Credit
             //
-            strHTML += "<b>" + tr("Credit") + ":</b> " + NoirSharesUnits::formatWithUnit(NoirSharesUnits::BTC, nNet) + "<br>";
+            strHTML += "<b>" + tr("Credit") + ":</b> " + NoirTokensUnits::formatWithUnit(NoirTokensUnits::BTC, nNet) + "<br>";
         }
         else
         {
@@ -169,12 +169,12 @@ QString TransactionDesc::toHTML(CWallet *wallet, CWalletTx &wtx)
                             strHTML += "<b>" + tr("To") + ":</b> ";
                             if (wallet->mapAddressBook.count(address) && !wallet->mapAddressBook[address].empty())
                                 strHTML += GUIUtil::HtmlEscape(wallet->mapAddressBook[address]) + " ";
-                            strHTML += GUIUtil::HtmlEscape(CNoirSharesAddress(address).ToString());
+                            strHTML += GUIUtil::HtmlEscape(CNoirTokensAddress(address).ToString());
                             strHTML += "<br>";
                         }
                     }
 
-                    strHTML += "<b>" + tr("Debit") + ":</b> " + NoirSharesUnits::formatWithUnit(NoirSharesUnits::BTC, -txout.nValue) + "<br>";
+                    strHTML += "<b>" + tr("Debit") + ":</b> " + NoirTokensUnits::formatWithUnit(NoirTokensUnits::BTC, -txout.nValue) + "<br>";
                 }
 
                 if (fAllToMe)
@@ -182,13 +182,13 @@ QString TransactionDesc::toHTML(CWallet *wallet, CWalletTx &wtx)
                     // Payment to self
                     int64 nChange = wtx.GetChange();
                     int64 nValue = nCredit - nChange;
-                    strHTML += "<b>" + tr("Debit") + ":</b> " + NoirSharesUnits::formatWithUnit(NoirSharesUnits::BTC, -nValue) + "<br>";
-                    strHTML += "<b>" + tr("Credit") + ":</b> " + NoirSharesUnits::formatWithUnit(NoirSharesUnits::BTC, nValue) + "<br>";
+                    strHTML += "<b>" + tr("Debit") + ":</b> " + NoirTokensUnits::formatWithUnit(NoirTokensUnits::BTC, -nValue) + "<br>";
+                    strHTML += "<b>" + tr("Credit") + ":</b> " + NoirTokensUnits::formatWithUnit(NoirTokensUnits::BTC, nValue) + "<br>";
                 }
 
                 int64 nTxFee = nDebit - wtx.GetValueOut();
                 if (nTxFee > 0)
-                    strHTML += "<b>" + tr("Transaction fee") + ":</b> " + NoirSharesUnits::formatWithUnit(NoirSharesUnits::BTC, -nTxFee) + "<br>";
+                    strHTML += "<b>" + tr("Transaction fee") + ":</b> " + NoirTokensUnits::formatWithUnit(NoirTokensUnits::BTC, -nTxFee) + "<br>";
             }
             else
             {
@@ -197,14 +197,14 @@ QString TransactionDesc::toHTML(CWallet *wallet, CWalletTx &wtx)
                 //
                 BOOST_FOREACH(const CTxIn& txin, wtx.vin)
                     if (wallet->IsMine(txin))
-                        strHTML += "<b>" + tr("Debit") + ":</b> " + NoirSharesUnits::formatWithUnit(NoirSharesUnits::BTC, -wallet->GetDebit(txin)) + "<br>";
+                        strHTML += "<b>" + tr("Debit") + ":</b> " + NoirTokensUnits::formatWithUnit(NoirTokensUnits::BTC, -wallet->GetDebit(txin)) + "<br>";
                 BOOST_FOREACH(const CTxOut& txout, wtx.vout)
                     if (wallet->IsMine(txout))
-                        strHTML += "<b>" + tr("Credit") + ":</b> " + NoirSharesUnits::formatWithUnit(NoirSharesUnits::BTC, wallet->GetCredit(txout)) + "<br>";
+                        strHTML += "<b>" + tr("Credit") + ":</b> " + NoirTokensUnits::formatWithUnit(NoirTokensUnits::BTC, wallet->GetCredit(txout)) + "<br>";
             }
         }
 
-        strHTML += "<b>" + tr("Net amount") + ":</b> " + NoirSharesUnits::formatWithUnit(NoirSharesUnits::BTC, nNet, true) + "<br>";
+        strHTML += "<b>" + tr("Net amount") + ":</b> " + NoirTokensUnits::formatWithUnit(NoirTokensUnits::BTC, nNet, true) + "<br>";
         strHTML += "<b>" + tr("Transaction ID") + ":</b> " + wtx.GetHash().ToString().c_str() + "<br>";
 
         //
@@ -237,10 +237,10 @@ QString TransactionDesc::toHTML(CWallet *wallet, CWalletTx &wtx)
             strHTML += "<hr><br>" + tr("Debug information") + "<br><br>";
             BOOST_FOREACH(const CTxIn& txin, wtx.vin)
                 if(wallet->IsMine(txin))
-                    strHTML += "<b>" + tr("Debit") + ":</b> " + NoirSharesUnits::formatWithUnit(NoirSharesUnits::BTC, -wallet->GetDebit(txin)) + "<br>";
+                    strHTML += "<b>" + tr("Debit") + ":</b> " + NoirTokensUnits::formatWithUnit(NoirTokensUnits::BTC, -wallet->GetDebit(txin)) + "<br>";
             BOOST_FOREACH(const CTxOut& txout, wtx.vout)
                 if(wallet->IsMine(txout))
-                    strHTML += "<b>" + tr("Credit") + ":</b> " + NoirSharesUnits::formatWithUnit(NoirSharesUnits::BTC, wallet->GetCredit(txout)) + "<br>";
+                    strHTML += "<b>" + tr("Credit") + ":</b> " + NoirTokensUnits::formatWithUnit(NoirTokensUnits::BTC, wallet->GetCredit(txout)) + "<br>";
 
             strHTML += "<br><b>" + tr("Transaction") + ":</b><br>";
             strHTML += GUIUtil::HtmlEscape(wtx.ToString(), true);
@@ -268,9 +268,9 @@ QString TransactionDesc::toHTML(CWallet *wallet, CWalletTx &wtx)
                             {
                                 if (wallet->mapAddressBook.count(address) && !wallet->mapAddressBook[address].empty())
                                     strHTML += GUIUtil::HtmlEscape(wallet->mapAddressBook[address]) + " ";
-                                strHTML += QString::fromStdString(CNoirSharesAddress(address).ToString());
+                                strHTML += QString::fromStdString(CNoirTokensAddress(address).ToString());
                             }
-                            strHTML = strHTML + " " + tr("Amount") + "=" + NoirSharesUnits::formatWithUnit(NoirSharesUnits::BTC, vout.nValue);
+                            strHTML = strHTML + " " + tr("Amount") + "=" + NoirTokensUnits::formatWithUnit(NoirTokensUnits::BTC, vout.nValue);
                             strHTML = strHTML + " IsMine=" + (wallet->IsMine(vout) ? tr("true") : tr("false")) + "</li>";
                         }
                     }

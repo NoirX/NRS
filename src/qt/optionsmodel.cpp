@@ -1,5 +1,5 @@
 #include "optionsmodel.h"
-#include "NoirSharesunits.h"
+#include "NoirTokensunits.h"
 #include <QSettings>
 
 #include "init.h"
@@ -41,7 +41,7 @@ void OptionsModel::Init()
     QSettings settings;
 
     // These are Qt-only settings:
-    nDisplayUnit = settings.value("nDisplayUnit", NoirSharesUnits::BTC).toInt();
+    nDisplayUnit = settings.value("nDisplayUnit", NoirTokensUnits::BTC).toInt();
     bDisplayAddresses = settings.value("bDisplayAddresses", false).toBool();
     fMinimizeToTray = settings.value("fMinimizeToTray", false).toBool();
     fMinimizeOnClose = settings.value("fMinimizeOnClose", false).toBool();
@@ -49,7 +49,7 @@ void OptionsModel::Init()
     language = settings.value("language", "").toString();
     fCoinControlFeatures = settings.value("fCoinControlFeatures", false).toBool();
 
-    // These are shared with core NoirShares; we want
+    // These are shared with core NoirTokens; we want
     // command-line options to override the GUI settings:
     if (settings.contains("fUseUPnP"))
         SoftSetBoolArg("-upnp", settings.value("fUseUPnP").toBool());

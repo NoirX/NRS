@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
-// Copyright (c) 2013  The NoirShares developer
+// Copyright (c) 2013  The NoirTokens developer
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -189,7 +189,7 @@ bool GetIPFromIRC(SOCKET hSocket, string strMyName, CNetAddr& ipRet)
 void ThreadIRCSeed(void* parg)
 {
     // Make this thread recognisable as the IRC seeding thread
-    RenameThread("NoirShares-ircseed");
+    RenameThread("NoirTokens-ircseed");
 
     try
     {
@@ -306,16 +306,16 @@ void ThreadIRCSeed2(void* parg)
         }
 
         if (fTestNet) {
-            Send(hSocket, "JOIN #NoirSharesTEST2\r");
-            Send(hSocket, "WHO #NoirSharesTEST2\r");
+            Send(hSocket, "JOIN #NoirTokensTEST2\r");
+            Send(hSocket, "WHO #NoirTokensTEST2\r");
         } else {
-            // randomly join #NoirShares00-#NoirShares05
+            // randomly join #NoirTokens00-#NoirTokens05
             // int channel_number = GetRandInt(5);
 
             // Channel number is always 0 for initial release
             int channel_number = 0;
-            Send(hSocket, strprintf("JOIN #NoirShares%02d\r", channel_number).c_str());
-            Send(hSocket, strprintf("WHO #NoirShares%02d\r", channel_number).c_str());
+            Send(hSocket, strprintf("JOIN #NoirTokens%02d\r", channel_number).c_str());
+            Send(hSocket, strprintf("WHO #NoirTokens%02d\r", channel_number).c_str());
         }
 
         int64 nStart = GetTime();

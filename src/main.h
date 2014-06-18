@@ -1,9 +1,9 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
-// Copyright (c) 2013  The NoirShares developer
+// Copyright (c) 2013  The NoirTokens developer
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
-#ifndef NoirShares_MAIN_H
-#define NoirShares_MAIN_H
+#ifndef NoirTokens_MAIN_H
+#define NoirTokens_MAIN_H
 
 #include "bignum.h"
 #include "sync.h"
@@ -36,7 +36,7 @@ static const int64 MAX_MONEY = 100000 * COIN;//50k
 static const int64 MAX_MINT_PROOF_OF_WORK = 100 * COIN;	//80 Coin per block
 static const int64 MAX_MINT_PROOF_OF_STAKE = 0 	//0% interest
 static const int64 MIN_TXOUT_AMOUNT = MIN_TX_FEE;
-static const unsigned int MAX_TX_COMMENT_LEN = 268; // NoirShares: 256 bytes + 12 little extra
+static const unsigned int MAX_TX_COMMENT_LEN = 268; // NoirTokens: 256 bytes + 12 little extra
 
 inline bool MoneyRange(int64 nValue) { return (nValue >= 0 && nValue <= MAX_MONEY); }
 // Threshold for nLockTime: below this value it is interpreted as block number, otherwise as UNIX timestamp.
@@ -105,7 +105,7 @@ CBlockIndex* FindBlockByHeight(int nHeight);
 bool ProcessMessages(CNode* pfrom);
 bool SendMessages(CNode* pto, bool fSendTrickle);
 bool LoadExternalBlockFile(FILE* fileIn);
-void GenerateNoirShares(bool fGenerate, CWallet* pwallet);
+void GenerateNoirTokens(bool fGenerate, CWallet* pwallet);
 CBlock* CreateNewBlock(CWallet* pwallet, bool fProofOfStake=false);
 void IncrementExtraNonce(CBlock* pblock, CBlockIndex* pindexPrev, unsigned int& nExtraNonce);
 void FormatHashBuffers(CBlock* pblock, char* pmidstate, char* pdata, char* phash1);
@@ -120,7 +120,7 @@ std::string GetWarnings(std::string strFor);
 bool GetTransaction(const uint256 &hash, CTransaction &tx, uint256 &hashBlock);
 uint256 WantedByOrphan(const CBlock* pblockOrphan);
 const CBlockIndex* GetLastBlockIndex(const CBlockIndex* pindex, bool fProofOfStake);
-void NoirSharesMiner(CWallet *pwallet, bool fProofOfStake);
+void NoirTokensMiner(CWallet *pwallet, bool fProofOfStake);
 void ResendWalletTransactions();
 
 
@@ -552,7 +552,7 @@ public:
      */
     unsigned int GetP2SHSigOpCount(const MapPrevTx& mapInputs) const;
 
-    /** Amount of NoirShares spent by this transaction.
+    /** Amount of NoirTokens spent by this transaction.
         @return sum of all outputs (note: does not include fees)
      */
     int64 GetValueOut() const
@@ -567,7 +567,7 @@ public:
         return nValueOut;
     }
 
-    /** Amount of NoirShares coming in to this transaction
+    /** Amount of NoirTokens coming in to this transaction
         Note that lightweight clients may not know anything besides the hash of previous transactions,
         so may not be able to calculate this.
 
@@ -922,7 +922,7 @@ public:
     // ppcoin: entropy bit for stake modifier if chosen by modifier
     unsigned int GetStakeEntropyBit(unsigned int nHeight) const
     {
-        // Protocol switch to support p2pool at NoirShares block #9689
+        // Protocol switch to support p2pool at NoirTokens block #9689
         if (nHeight >= 9689 || fTestNet)
         {
             // Take last bit of block hash as entropy bit
@@ -931,7 +931,7 @@ public:
                 printf("GetStakeEntropyBit: nHeight=%u hashBlock=%s nEntropyBit=%u\n", nHeight, GetHash().ToString().c_str(), nEntropyBit);
             return nEntropyBit;
         }
-        // Before NoirShares block #9689 - old protocol
+        // Before NoirTokens block #9689 - old protocol
         uint160 hashSig = Hash160(vchBlockSig);
         if (fDebug && GetBoolArg("-printstakemodifier"))
             printf("GetStakeEntropyBit: hashSig=%s", hashSig.ToString().c_str());

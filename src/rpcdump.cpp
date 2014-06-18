@@ -1,9 +1,9 @@
-// Copyright (c) 2003 NoirShares Developer
+// Copyright (c) 2003 NoirTokens Developer
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include "init.h" // for pwalletMain
-#include "NoirSharesrpc.h"
+#include "NoirTokensrpc.h"
 #include "ui_interface.h"
 #include "base58.h"
 
@@ -64,7 +64,7 @@ Value importprivkey(const Array& params, bool fHelp)
 {
     if (fHelp || params.size() < 1 || params.size() > 2)
         throw runtime_error(
-            "importprivkey <NoirSharesPrivkey> [label]\n"
+            "importprivkey <NoirTokensPrivkey> [label]\n"
             "Adds a private key (as returned by dumpprivkey) to your wallet.");
 
     string strSecret = params[0].get_str();
@@ -74,7 +74,7 @@ Value importprivkey(const Array& params, bool fHelp)
     string strLabel = "";
     if (params.size() > 1)
         strLabel = params[1].get_str();
-    CNoirSharesecret vchSecret;
+    CNoirTokensecret vchSecret;
     bool fGood = vchSecret.SetString(strSecret);
 
     if (!fGood) throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid PTS private key");
@@ -106,13 +106,13 @@ Value dumpprivkey(const Array& params, bool fHelp)
 {
     if (fHelp || params.size() != 1)
         throw runtime_error(
-            "dumpprivkey <NoirSharesAddress>\n"
-            "Reveals the private key corresponding to <NoirSharesaddress>.");
+            "dumpprivkey <NoirTokensAddress>\n"
+            "Reveals the private key corresponding to <NoirTokensaddress>.");
 
     string strAddress = params[0].get_str();
-    CNoirSharesAddress address;
+    CNoirTokensAddress address;
     if (!address.SetString(strAddress))
-        throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid NoirShares address");
+        throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid NoirTokens address");
     if (fWalletUnlockMintOnly) // ppcoin: no dumpprivkey in mint-only mode
         throw JSONRPCError(RPC_WALLET_UNLOCK_NEEDED, "Wallet is unlocked for minting only.");
     CKeyID keyID;
@@ -122,5 +122,5 @@ Value dumpprivkey(const Array& params, bool fHelp)
     bool fCompressed;
     if (!pwalletMain->GetSecret(keyID, vchSecret, fCompressed))
         throw JSONRPCError(RPC_WALLET_ERROR, "Private key for address " + strAddress + " is not known");
-    return CNoirSharesecret(vchSecret, fCompressed).ToString();
+    return CNoirTokensecret(vchSecret, fCompressed).ToString();
 }

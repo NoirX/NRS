@@ -69,7 +69,7 @@ OBJS= \
     obj/momentum.o \
     obj/net.o \
     obj/protocol.o \
-    obj/NoirSharesrpc.o \
+    obj/NoirTokensrpc.o \
     obj/rpcdump.o \
     obj/rpcnet.o \
     obj/rpcmining.o \
@@ -84,15 +84,15 @@ OBJS= \
     obj/noui.o \
     obj/kernel.o
 
-all: NoirSharesd.exe
+all: NoirTokensd.exe
 
-test check: test_NoirShares.exe FORCE
-	test_NoirShares.exe
+test check: test_NoirTokens.exe FORCE
+	test_NoirTokens.exe
 
 obj/%.o: %.cpp $(HEADERS)
 	g++ -c $(CFLAGS) -o $@ $<
 
-NoirSharesd.exe: $(OBJS:obj/%=obj/%)
+NoirTokensd.exe: $(OBJS:obj/%=obj/%)
 	g++ $(CFLAGS) $(LDFLAGS) -o $@ $(LIBPATHS) $^ $(LIBS)
 
 TESTOBJS := $(patsubst test/%.cpp,obj-test/%.o,$(wildcard test/*.cpp))
@@ -100,11 +100,11 @@ TESTOBJS := $(patsubst test/%.cpp,obj-test/%.o,$(wildcard test/*.cpp))
 obj-test/%.o: test/%.cpp $(HEADERS)
 	g++ -c $(TESTDEFS) $(CFLAGS) -o $@ $<
 
-test_NoirShares.exe: $(TESTOBJS) $(filter-out obj/init.o,$(OBJS:obj/%=obj/%))
+test_NoirTokens.exe: $(TESTOBJS) $(filter-out obj/init.o,$(OBJS:obj/%=obj/%))
 	g++ $(CFLAGS) $(LDFLAGS) -o $@ $(LIBPATHS) $^ -lboost_unit_test_framework $(LIBS)
 
 clean:
-	-del /Q NoirSharesd test_NoirShares
+	-del /Q NoirTokensd test_NoirTokens
 	-del /Q obj\*
 	-del /Q obj-test\*
 

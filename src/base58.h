@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
-// Copyright (c) 2013  The NoirShares developer
+// Copyright (c) 2013  The NoirTokens developer
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -12,8 +12,8 @@
 // - E-mail usually won't line-break if there's no punctuation to break at.
 // - Double-clicking selects the whole number as one word if it's all alphanumeric.
 //
-#ifndef NoirShares_BASE58_H
-#define NoirShares_BASE58_H
+#ifndef NoirTokens_BASE58_H
+#define NoirTokens_BASE58_H
 
 #include <string>
 #include <vector>
@@ -266,25 +266,25 @@ public:
     bool operator> (const CBase58Data& b58) const { return CompareTo(b58) >  0; }
 };
 
-/** base58-encoded NoirShares addresses.
+/** base58-encoded NoirTokens addresses.
  * Public-key-hash-addresses have version 0 (or 111 testnet).
  * The data vector contains RIPEMD160(SHA256(pubkey)), where pubkey is the serialized public key.
  * Script-hash-addresses have version 5 (or 196 testnet).
  * The data vector contains RIPEMD160(SHA256(cscript)), where cscript is the serialized redemption script.
  */
-class CNoirSharesAddress;
-class CNoirSharesAddressVisitor : public boost::static_visitor<bool>
+class CNoirTokensAddress;
+class CNoirTokensAddressVisitor : public boost::static_visitor<bool>
 {
 private:
-    CNoirSharesAddress *addr;
+    CNoirTokensAddress *addr;
 public:
-    CNoirSharesAddressVisitor(CNoirSharesAddress *addrIn) : addr(addrIn) { }
+    CNoirTokensAddressVisitor(CNoirTokensAddress *addrIn) : addr(addrIn) { }
     bool operator()(const CKeyID &id) const;
     bool operator()(const CScriptID &id) const;
     bool operator()(const CNoDestination &no) const;
 };
 
-class CNoirSharesAddress : public CBase58Data
+class CNoirTokensAddress : public CBase58Data
 {
 public:
     enum
@@ -307,7 +307,7 @@ public:
 
     bool Set(const CTxDestination &dest)
     {
-        return boost::apply_visitor(CNoirSharesAddressVisitor(this), dest);
+        return boost::apply_visitor(CNoirTokensAddressVisitor(this), dest);
     }
 
     bool IsValid() const
@@ -340,21 +340,21 @@ public:
         return fExpectTestNet == fTestNet && vchData.size() == nExpectedSize;
     }
 
-    CNoirSharesAddress()
+    CNoirTokensAddress()
     {
     }
 
-    CNoirSharesAddress(const CTxDestination &dest)
+    CNoirTokensAddress(const CTxDestination &dest)
     {
         Set(dest);
     }
 
-    CNoirSharesAddress(const std::string& strAddress)
+    CNoirTokensAddress(const std::string& strAddress)
     {
         SetString(strAddress);
     }
 
-    CNoirSharesAddress(const char* pszAddress)
+    CNoirTokensAddress(const char* pszAddress)
     {
         SetString(pszAddress);
     }
@@ -407,12 +407,12 @@ public:
     }
 };
 
-bool inline CNoirSharesAddressVisitor::operator()(const CKeyID &id) const         { return addr->Set(id); }
-bool inline CNoirSharesAddressVisitor::operator()(const CScriptID &id) const      { return addr->Set(id); }
-bool inline CNoirSharesAddressVisitor::operator()(const CNoDestination &id) const { return false; }
+bool inline CNoirTokensAddressVisitor::operator()(const CKeyID &id) const         { return addr->Set(id); }
+bool inline CNoirTokensAddressVisitor::operator()(const CScriptID &id) const      { return addr->Set(id); }
+bool inline CNoirTokensAddressVisitor::operator()(const CNoDestination &id) const { return false; }
 
 /** A base58-encoded secret key */
-class CNoirSharesecret : public CBase58Data
+class CNoirTokensecret : public CBase58Data
 {
 public:
     void SetSecret(const CSecret& vchSecret, bool fCompressed)
@@ -460,12 +460,12 @@ public:
         return SetString(strSecret.c_str());
     }
 
-    CNoirSharesecret(const CSecret& vchSecret, bool fCompressed)
+    CNoirTokensecret(const CSecret& vchSecret, bool fCompressed)
     {
         SetSecret(vchSecret, fCompressed);
     }
 
-    CNoirSharesecret()
+    CNoirTokensecret()
     {
     }
 };

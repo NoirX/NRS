@@ -1,4 +1,4 @@
-#include "NoirSharesaddressvalidator.h"
+#include "NoirTokensaddressvalidator.h"
 
 /* Base58 characters are:
      "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz"
@@ -13,12 +13,12 @@
   - '0' and 'O' to 'o'
 */
 
-NoirSharesAddressValidator::NoirSharesAddressValidator(QObject *parent) :
+NoirTokensAddressValidator::NoirTokensAddressValidator(QObject *parent) :
     QValidator(parent)
 {
 }
 
-QValidator::State NoirSharesAddressValidator::validate(QString &input, int &pos) const
+QValidator::State NoirTokensAddressValidator::validate(QString &input, int &pos) const
 {
     // Correction
     for(int idx=0; idx<input.size();)
