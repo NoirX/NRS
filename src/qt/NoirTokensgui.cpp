@@ -80,7 +80,7 @@ NoirTokensGUI::NoirTokensGUI(QWidget *parent):
     // pal.setColor(QPalette::WindowText, Qt::white);
     // this->setPalette(pal);
     // this->setAutoFillBackground(true);
-
+/*
     this->setStyleSheet("QMainWindow {background-color: black; color: white;} "
 #ifndef Q_OS_MAC
                         "QToolButton {background-color: black; color: white;} "
@@ -119,7 +119,7 @@ NoirTokensGUI::NoirTokensGUI(QWidget *parent):
                     //    "scrollAreaWidgetContents {background-color: white; border-color: white; "
                     //    "                          color: white; border-width: 1px;} "
                        );
-
+*/
 
 #ifndef Q_OS_MAC
     qApp->setWindowIcon(QIcon(":icons/NoirTokens"));
