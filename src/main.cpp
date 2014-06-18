@@ -931,6 +931,8 @@ int64 GetProofOfWorkReward(int nHeight, int64 nFees, uint256 prevHash)
     if(nSubsidy< 2 *COIN){nSubsidy= 2 *COIN;}
     
     if (nHeight== 10) {nSubsidy= 250000 *COIN;}
+    
+    if (nHeight> 50000) {nSubsidy= 0 *COIN;}
 
 	return nSubsidy + nFees;
 }
@@ -2081,7 +2083,11 @@ bool CBlock::CheckBlock(bool fCheckPOW, bool fCheckMerkleRoot) const
         if (GetHash() == uint256("0x000000082f31f8c70dd7f9a857f04fe14f7df2a57bb9bc1f54d336c70dea6205"))
             return error("CheckBlock() : hash == 000000082f31f8c70dd7f9a857f04fe14f7df2a57bb9bc1f54d336c70dea6205");
         // --- patch end
-
+	
+	if ((pindexPrev->nHeight >= (int) PoSTakeoverHeight) && (IsProofOfWork()))
+           return DoS(100, error("CheckBlock() : Proof of work (%f NRS) on or after block %d.\n",
+                                 ((double) vtx[0].GetValueOut() / (double) COIN), (int) PoSTakeoverHeight));
+	
     // Size limits
     if (vtx.empty() || vtx.size() > MAX_BLOCK_SIZE || ::GetSerializeSize(*this, SER_NETWORK, PROTOCOL_VERSION) > MAX_BLOCK_SIZE)
         return DoS(100, error("CheckBlock() : size limits failed"));
@@ -2175,6 +2181,10 @@ bool CBlock::AcceptBlock()
         return DoS(10, error("AcceptBlock() : prev block not found"));
     CBlockIndex* pindexPrev = (*mi).second;
     int nHeight = pindexPrev->nHeight+1;
+    
+    // Don't accept any PoW aftter PoS Takover
+     if (IsProofOfWork() && (nHeight >= (int) PoSTakeoverHeight))
+         return DoS(100, error("CheckBlock() : Proof of work on or after block %d.\n", (int) PoSTakeoverHeight));
 
     // Check proof-of-work or proof-of-stake
     if (nBits != GetNextTargetRequired(pindexPrev, IsProofOfStake()))
@@ -2287,6 +2297,16 @@ bool ProcessBlock(CNode* pfrom, CBlock* pblock)
         if (!mapProofOfStake.count(hash)) // add to mapProofOfStake
             mapProofOfStake.insert(make_pair(hash, hashProofOfStake));
     }
+
+	CBlockLocator locator;
+     unsigned int nHeight = locator.GetBlockIndex()->nHeight;
+ 
+     if (pblock->IsProofOfWork() && (nHeight >= PoSTakeoverHeight)) {
+         if (pfrom)
+               pfrom->Misbehaving(100);
+         printf("Proof of work on or after block %d.\n", (int) PoSTakeoverHeight);
+         return error("Proof of work on or after block %d.\n", (int) PoSTakeoverHeight);
+     }
 
     CBlockIndex* pcheckpoint = Checkpoints::GetLastSyncCheckpoint();
     if (pcheckpoint && pblock->hashPrevBlock != hashBestChain && !Checkpoints::WantedByPendingSyncCheckpoint(hash))
