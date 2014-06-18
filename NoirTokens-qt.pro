@@ -16,7 +16,7 @@ win32 {
    }
 }
 TEMPLATE = app
-TARGET = NoirShares-Qt
+TARGET = NoirTokens-Qt
 VERSION = 2.0
 INCLUDEPATH += src src/json src/qt
 macx:INCLUDEPATH += /usr/local/BerkeleyDB.4.8/include
@@ -153,6 +153,11 @@ contains(BITCOIN_NEED_QT_PLUGINS, 1) {
     # do not enable this on windows, as it will result in a non-working executable!
 }
 
+!win32:!macx {
+    QMAKE_LFLAGS *= -static
+    QMAKE_LFLAGS *= -Wl,--large-address-aware
+}
+
 # regenerate src/build.h
 !win32|contains(USE_BUILD_INFO, 1) {
     genbuild.depends = FORCE
@@ -169,7 +174,7 @@ QMAKE_CXXFLAGS_WARN_ON = -fdiagnostics-show-option -Wall -Wextra -Wformat -Wform
 
 # Input
 DEPENDPATH += src src/json src/qt
-HEADERS += src/qt/NoirSharesgui.h \
+HEADERS += src/qt/NoirTokensgui.h \
     src/qt/transactiontablemodel.h \
     src/qt/addresstablemodel.h \
     src/qt/optionsdialog.h \
@@ -180,7 +185,7 @@ HEADERS += src/qt/NoirSharesgui.h \
     src/qt/signverifymessagedialog.h \
     src/qt/aboutdialog.h \
     src/qt/editaddressdialog.h \
-    src/qt/NoirSharesaddressvalidator.h \
+    src/qt/NoirTokensaddressvalidator.h \
     src/alert.h \
     src/addrman.h \
     src/base58.h \
@@ -220,19 +225,19 @@ HEADERS += src/qt/NoirSharesgui.h \
     src/qt/monitoreddatamapper.h \
     src/qt/transactiondesc.h \
     src/qt/transactiondescdialog.h \
-    src/qt/NoirSharesamountfield.h \
+    src/qt/NoirTokensamountfield.h \
     src/wallet.h \
     src/keystore.h \
     src/qt/transactionfilterproxy.h \
     src/qt/transactionview.h \
     src/qt/walletmodel.h \
-    src/NoirSharesrpc.h \
+    src/NoirTokensrpc.h \
     src/qt/overviewpage.h \
     src/qt/csvmodelwriter.h \
     src/crypter.h \
     src/qt/sendcoinsentry.h \
     src/qt/qvalidatedlineedit.h \
-    src/qt/NoirSharesunits.h \
+    src/qt/NoirTokensunits.h \
     src/qt/qvaluecombobox.h \
     src/qt/askpassphrasedialog.h \
     src/protocol.h \
@@ -245,7 +250,7 @@ HEADERS += src/qt/NoirSharesgui.h \
     src/netbase.h \
     src/clientversion.h
 
-SOURCES += src/qt/NoirShares.cpp src/qt/NoirSharesgui.cpp \
+SOURCES += src/qt/NoirTokens.cpp src/qt/NoirTokensgui.cpp \
     src/qt/transactiontablemodel.cpp \
     src/qt/addresstablemodel.cpp \
     src/qt/optionsdialog.cpp \
@@ -256,7 +261,7 @@ SOURCES += src/qt/NoirShares.cpp src/qt/NoirSharesgui.cpp \
     src/qt/signverifymessagedialog.cpp \
     src/qt/aboutdialog.cpp \
     src/qt/editaddressdialog.cpp \
-    src/qt/NoirSharesaddressvalidator.cpp \
+    src/qt/NoirTokensaddressvalidator.cpp \
     src/alert.cpp \
     src/version.cpp \
     src/sync.cpp \
@@ -279,14 +284,14 @@ SOURCES += src/qt/NoirShares.cpp src/qt/NoirSharesgui.cpp \
     src/qt/monitoreddatamapper.cpp \
     src/qt/transactiondesc.cpp \
     src/qt/transactiondescdialog.cpp \
-    src/qt/NoirSharesstrings.cpp \
-    src/qt/NoirSharesamountfield.cpp \
+    src/qt/NoirTokensstrings.cpp \
+    src/qt/NoirTokensamountfield.cpp \
     src/wallet.cpp \
     src/keystore.cpp \
     src/qt/transactionfilterproxy.cpp \
     src/qt/transactionview.cpp \
     src/qt/walletmodel.cpp \
-    src/NoirSharesrpc.cpp \
+    src/NoirTokensrpc.cpp \
     src/rpcdump.cpp \
     src/rpcnet.cpp \
     src/rpcmining.cpp \
@@ -298,7 +303,7 @@ SOURCES += src/qt/NoirShares.cpp src/qt/NoirSharesgui.cpp \
     src/crypter.cpp \
     src/qt/sendcoinsentry.cpp \
     src/qt/qvalidatedlineedit.cpp \
-    src/qt/NoirSharesunits.cpp \
+    src/qt/NoirTokensunits.cpp \
     src/qt/qvaluecombobox.cpp \
     src/qt/askpassphrasedialog.cpp \
     src/protocol.cpp \
@@ -310,7 +315,7 @@ SOURCES += src/qt/NoirShares.cpp src/qt/NoirSharesgui.cpp \
     src/momentum.cpp
 
 RESOURCES += \
-    src/qt/NoirShares.qrc
+    src/qt/NoirTokens.qrc
 
 FORMS += \
     src/qt/forms/sendcoinsdialog.ui \
@@ -363,7 +368,7 @@ QMAKE_EXTRA_COMPILERS += TSQM
 
 # "Other files" to show in Qt Creator
 OTHER_FILES += \
-    contrib/gitian-descriptors/* doc/*.rst doc/*.txt doc/README README.md res/NoirShares-qt.rc \
+    contrib/gitian-descriptors/* doc/*.rst doc/*.txt doc/README README.md res/NoirTokens-qt.rc \
     share/setup.nsi
 
 # platform specific defaults, if not overridden on command line
@@ -426,7 +431,7 @@ macx:OBJECTIVE_SOURCES += src/qt/macdockiconhandler.mm
 macx:LIBS += -framework Foundation -framework ApplicationServices -framework AppKit
 macx:DEFINES += MAC_OSX MSG_NOSIGNAL=0
 macx:ICON = src/qt/res/icons/bitcoin.icns
-macx:TARGET = "NoirShares Qt"
+macx:TARGET = "NoirTokens Qt"
 macx:QMAKE_CFLAGS_THREAD += -pthread
 macx:QMAKE_LFLAGS_THREAD += -pthread
 macx:QMAKE_CXXFLAGS_THREAD += -pthread

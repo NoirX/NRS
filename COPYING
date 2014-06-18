@@ -1,6 +1,8 @@
 Copyright (c) 2011-2012 PPCoin Developers
 Copyright (c) 2009-2012 Bitcoin Developers
+Copyright (c) 2014 Noir Group
 Copyright (c) 2014 NoirShares Developers
+Copyright (c) 2014 NoirTokens Developers
 
 Permission is hereby granted, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -11,8 +13,8 @@ furnished to do so, subject to the following conditions:
 The above copyright notice, the list of conditions, the disclaimer and permission notice shall be included in
 all copies or substantial portions of the Software, redistribution or otheriwise.
 
-All modified redistributions will allocate a percentage of their total value supply units proportional to the support given by the NIG to Noirshares at genesis
-of said redistribution, in the event of no support given, for use of this code alone redistributions will allocate 3% of their total lifetime value supply units to NoirShares. 
+All modified redistributions will allocate a percentage of their total value supply units proportional to the support given by the NIG to NoirTokens at genesis
+of said redistribution, in the event of no support given, for use of this code alone redistributions will allocate 3% of their total lifetime value supply units to NoirTokens. 
 
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR

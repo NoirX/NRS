@@ -1,6 +1,6 @@
 TEMPLATE = app
-TARGET = NoirSharesd
-#macx:TARGET = "NoirShares-Qt"
+TARGET = NoirTokensd
+#macx:TARGET = "NoirTokens-Qt"
 VERSION = 0.8.5
 INCLUDEPATH += src src/json 
 QT += network
@@ -212,7 +212,7 @@ SOURCES +=  \
     src/txdb.cpp \
     src/momentum.cpp
 
-RESOURCES += src/qt/NoirShares.qrc
+RESOURCES += src/qt/NoirTokens.qrc
 
 #FORMS += src/qt/forms/sendcoinsdialog.ui \
 #    src/qt/forms/addressbookpage.ui \
