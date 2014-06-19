@@ -917,13 +917,57 @@ uint256 WantedByOrphan(const CBlock* pblockOrphan)
     return pblockOrphan->hashPrevBlock;
 }
 
+int GetRandomNumberHashSeed(int nRange, int nHashStart, int nHashCount) {
+
+	uint256 hash = pindex->GetBlockHash();
+	std::string cseed_str = hash.ToString().substr(nHashStart,nHashCount);
+	const char* cseed = cseed_str.c_str();
+ 	long seed = hex2long(cseed);
+
+	int random = generateMTRandom(seed, nRange);
+	return random;
+
+}
+
 // miner's coin base reward based on nBits
+
 int64 GetProofOfWorkReward(int nHeight, int64 nFees, uint256 prevHash)
 {
-	int64 nSubsidy = 0.1 * COIN;
-	
-	return nSubsidy + nFees;
+	 int64 nSubsidy = 0.1 * COIN;
+	 //add standard block rewards here
+	 
+	//check for jackpot reward
+
+	bool bJackpot = false;
+
+	int rand1 =  GetRandomNumberHashSeed(1008,12,7);
+
+	if (rand1 > 1007) {
+		//jackpot hit
+		bJackpot = true;
+
+		int nPot = GetRandomNumberHashSeed(50,19,7);
+		nPot += 100
+		nSubsidy += nPot;
+		
+	}
+
+	//check for micro reward
+	if (!bJackpot) {
+
+		int rand2 =  GetRandomNumberHashSeed(6,26,7);	
+		if (rand2 > 5) {
+			//micro reward hit 
+			int rand3 = GetRandomNumberHashSeed(3,34,7);
+			double dMReward = (rand3 * 0.1);
+			nSubsidy += dMReward;
+		}
+
+ 	}
+
+ 	return nSubsidy + nFees;
 }
+
 
 // miner's coin stake reward based on nBits and coin age spent (coin-days)
 int64 GetProofOfStakeReward(int64 nCoinAge, unsigned int nBits, unsigned int nTime)
