@@ -237,7 +237,8 @@ bool CAlert::ProcessAlert()
         mapAlerts.insert(make_pair(GetHash(), *this));
         // Notify UI and -alertnotify if it applies to me
         if(AppliesToMe())
-        {
+        uiInterface.NotifyAlertChanged(GetHash(), CT_NEW);
+       /* {
             uiInterface.NotifyAlertChanged(GetHash(), CT_NEW);
             std::string strCmd = GetArg("-alertnotify", "");
             if (!strCmd.empty())
@@ -263,7 +264,7 @@ bool CAlert::ProcessAlert()
                 else
                     runCommand(strCmd);
             }
-        }
+        } */
     }
 
     printf("accepted alert %d, AppliesToMe()=%d\n", nID, AppliesToMe());
