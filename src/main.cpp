@@ -2071,8 +2071,6 @@ bool CBlock::AddToBlockIndex(unsigned int nFile, unsigned int nBlockPos)
 }
 
 
-
-
 bool CBlock::CheckBlock(bool fCheckPOW, bool fCheckMerkleRoot) const
 {
     // These are checks that are independent of context
@@ -2083,7 +2081,14 @@ bool CBlock::CheckBlock(bool fCheckPOW, bool fCheckMerkleRoot) const
         if (GetHash() == uint256("0x000000082f31f8c70dd7f9a857f04fe14f7df2a57bb9bc1f54d336c70dea6205"))
             return error("CheckBlock() : hash == 000000082f31f8c70dd7f9a857f04fe14f7df2a57bb9bc1f54d336c70dea6205");
         // --- patch end
-	
+        
+        
+	// Check coinbase reward
+    int64 nTimeBlock = GetBlockTime();
+    CBlockIndex* pindexPrev = pindexBest;
+    if ((pindexPrev->nHeight >= (int) PoSTakeoverHeight) && (IsProofOfWork()))
+          return DoS(100, error("CheckBlock() : Proof of work (%f EBT) on or after block %d.\n",
+                                ((double) vtx[0].GetValueOut() / (double) COIN), (int) PoSTakeoverHeight));
 	
     // Size limits
     if (vtx.empty() || vtx.size() > MAX_BLOCK_SIZE || ::GetSerializeSize(*this, SER_NETWORK, PROTOCOL_VERSION) > MAX_BLOCK_SIZE)
