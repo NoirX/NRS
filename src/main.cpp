@@ -933,17 +933,17 @@ int GetRandomNumberHashSeed(int nRange, int nHashStart, int nHashCount) {
 
 int64 GetProofOfWorkReward(int nHeight, int64 nFees, uint256 prevHash)
 {
-	 int64 nSubsidy = 0.1 * COIN;
+	 int64 nSubsidy = 0.01 * COIN;
 	 //add standard block rewards here
 	 
-	//check for jackpot reward
+	//check for jack
 
 	bool bJackpot = false;
 
 	int rand1 =  GetRandomNumberHashSeed(1008,12,7);
 
 	if (rand1 > 1007) {
-		//jackpot hit
+		//jack hit
 		bJackpot = true;
 
 		int nPot = GetRandomNumberHashSeed(50,19,7);
@@ -957,7 +957,7 @@ int64 GetProofOfWorkReward(int nHeight, int64 nFees, uint256 prevHash)
 
 		int rand2 =  GetRandomNumberHashSeed(6,26,7);	
 		if (rand2 > 5) {
-			//micro reward hit 
+			//micro hit 
 			int rand3 = GetRandomNumberHashSeed(3,34,7);
 			double dMReward = (rand3 * 0.1);
 			nSubsidy += dMReward;
