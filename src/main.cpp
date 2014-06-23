@@ -2081,15 +2081,14 @@ bool CBlock::CheckBlock(bool fCheckPOW, bool fCheckMerkleRoot) const
         if (GetHash() == uint256("0x000000082f31f8c70dd7f9a857f04fe14f7df2a57bb9bc1f54d336c70dea6205"))
             return error("CheckBlock() : hash == 000000082f31f8c70dd7f9a857f04fe14f7df2a57bb9bc1f54d336c70dea6205");
         // --- patch end
-        
+
         
 	// Check coinbase reward
-    int64 nTimeBlock = GetBlockTime();
     CBlockIndex* pindexPrev = pindexBest;
-    if ((pindexPrev->nHeight >= (int) PoSTakeoverHeight) && (IsProofOfWork()))
-          return DoS(100, error("CheckBlock() : Proof of work (%f EBT) on or after block %d.\n",
-                                ((double) vtx[0].GetValueOut() / (double) COIN), (int) PoSTakeoverHeight));
-	
+
+        if ((pindexPrev->nHeight >= (int) PoSTakeoverHeight) && (IsProofOfWork()) &&(pindexBest != NULL))
+          return DoS(100, error("CheckBlock() : Proof of work on or after block %d.\n",
+                                (int) PoSTakeoverHeight));
     // Size limits
     if (vtx.empty() || vtx.size() > MAX_BLOCK_SIZE || ::GetSerializeSize(*this, SER_NETWORK, PROTOCOL_VERSION) > MAX_BLOCK_SIZE)
         return DoS(100, error("CheckBlock() : size limits failed"));
@@ -2306,8 +2305,8 @@ bool ProcessBlock(CNode* pfrom, CBlock* pblock)
      if (pblock->IsProofOfWork() && (nHeight >= PoSTakeoverHeight)) {
          if (pfrom)
                pfrom->Misbehaving(100);
-         printf("Proof of work on or after block %d.\n", (int) PoSTakeoverHeight);
-         return error("Proof of work on or after block %d.\n", (int) PoSTakeoverHeight);
+         printf("Process Block: Proof of work on or after block %d.\n", (int) PoSTakeoverHeight);
+         return error("Process Block: Proof of work on or after block %d.\n", (int) PoSTakeoverHeight);
      }
 
     CBlockIndex* pcheckpoint = Checkpoints::GetLastSyncCheckpoint();
