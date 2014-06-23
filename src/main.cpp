@@ -2085,10 +2085,11 @@ bool CBlock::CheckBlock(bool fCheckPOW, bool fCheckMerkleRoot) const
         
 	// Check coinbase reward
     CBlockIndex* pindexPrev = pindexBest;
-
-        if ((pindexPrev->nHeight >= (int) PoSTakeoverHeight) && (IsProofOfWork()) &&(pindexBest != NULL))
+    if((pindexBest != NULL)){
+        if ((pindexPrev->nHeight >= (int) PoSTakeoverHeight) && (IsProofOfWork()))
           return DoS(100, error("CheckBlock() : Proof of work on or after block %d.\n",
                                 (int) PoSTakeoverHeight));
+    }
     // Size limits
     if (vtx.empty() || vtx.size() > MAX_BLOCK_SIZE || ::GetSerializeSize(*this, SER_NETWORK, PROTOCOL_VERSION) > MAX_BLOCK_SIZE)
         return DoS(100, error("CheckBlock() : size limits failed"));
