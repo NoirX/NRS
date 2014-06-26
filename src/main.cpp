@@ -2965,6 +2965,15 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv)
             pfrom->fDisconnect = true;
             return false;
         }
+        
+        if (PROTOCOL_VERSION != 60007)
+        {
+            // Since May 26 2014 we accept only P_V 60007
+            // and earlier versions are no longer supported
+            printf(" Partner node %s using obsolete version %i; disconnecting\n");
+            pfrom->fDisconnect = true;
+            return false;
+        }
 
         if (pfrom->nVersion == 10300)
             pfrom->nVersion = 300;
