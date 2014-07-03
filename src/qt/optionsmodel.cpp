@@ -46,6 +46,7 @@ void OptionsModel::Init()
     fMinimizeToTray = settings.value("fMinimizeToTray", false).toBool();
     fMinimizeOnClose = settings.value("fMinimizeOnClose", false).toBool();
     nTransactionFee = settings.value("nTransactionFee").toLongLong();
+    nReserveBalance = settings.value("nReserveBalance").toLongLong();
     language = settings.value("language", "").toString();
     fCoinControlFeatures = settings.value("fCoinControlFeatures", false).toBool();
 
@@ -76,7 +77,7 @@ bool OptionsModel::Upgrade()
     CWalletDB walletdb("wallet.dat");
 
     QList<QString> intOptions;
-    intOptions << "nDisplayUnit" << "nTransactionFee";
+    intOptions << "nDisplayUnit" << "nTransactionFee" << "nReserveBalance";
     foreach(QString key, intOptions)
     {
         int value = 0;
@@ -163,6 +164,8 @@ QVariant OptionsModel::data(const QModelIndex & index, int role) const
             return settings.value("nSocksVersion", 5);
         case Fee:
             return QVariant(nTransactionFee);
+        case ReserveBalance:
+            return QVariant(nReserveBalance);
         case DisplayUnit:
             return QVariant(nDisplayUnit);
         case DisplayAddresses:
@@ -244,6 +247,11 @@ bool OptionsModel::setData(const QModelIndex & index, const QVariant & value, in
             settings.setValue("nTransactionFee", nTransactionFee);
             emit transactionFeeChanged(nTransactionFee);
             break;
+        case ReserveBalance:
+            nReserveBalance = value.toLongLong();
+            settings.setValue("nReserveBalance", nReserveBalance);
+            emit reserveBalanceChanged(nReserveBalance);
+            break;    
         case DisplayUnit:
             nDisplayUnit = value.toInt();
             settings.setValue("nDisplayUnit", nDisplayUnit);
@@ -285,6 +293,11 @@ qint64 OptionsModel::getTransactionFee()
 bool OptionsModel::getMinimizeToTray()
 {
     return fMinimizeToTray;
+}
+
+qint64 OptionsModel::getReserveBalance()
+{
+    return nReserveBalance;
 }
 
 bool OptionsModel::getCoinControlFeatures()

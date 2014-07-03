@@ -141,6 +141,17 @@ HEADERS += \
     src/compat.h \
     src/sync.h \
     src/util.h \
+    src/zerocoin/Accumulator.h \
+    src/zerocoin/AccumulatorProofOfKnowledge.h \
+    src/zerocoin/Coin.h \
+    src/zerocoin/CoinSpend.h \
+    src/zerocoin/Commitment.h \
+    src/zerocoin/ParamGeneration.h \
+    src/zerocoin/Params.h \
+    src/zerocoin/SerialNumberSignatureOfKnowledge.h \
+    src/zerocoin/SpendMetaData.h \
+    src/zerocoin/ZeroTest.h \
+    src/zerocoin/Zerocoin.h \
     src/hash.h \
     src/uint256.h \
     src/serialize.h \
@@ -210,7 +221,17 @@ SOURCES +=  \
     src/noui.cpp \
     src/leveldb.cpp \
     src/txdb.cpp \
-    src/momentum.cpp
+    src/momentum.cpp \
+    src/zerocoin/Accumulator.cpp \
+    src/zerocoin/AccumulatorProofOfKnowledge.cpp \
+    src/zerocoin/Coin.cpp \
+    src/zerocoin/CoinSpend.cpp \
+    src/zerocoin/Commitment.cpp \
+    src/zerocoin/ParamGeneration.cpp \
+    src/zerocoin/Params.cpp \
+    src/zerocoin/SerialNumberSignatureOfKnowledge.cpp \
+    src/zerocoin/SpendMetaData.cpp \
+    src/zerocoin/ZeroTest.cpp
 
 RESOURCES += src/qt/NoirShares.qrc
 
