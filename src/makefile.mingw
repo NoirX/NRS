@@ -92,7 +92,9 @@ OBJS= \
     obj/zerocoin/Params.o \
     obj/zerocoin/SerialNumberSignatureOfKnowledge.o \
     obj/zerocoin/SpendMetaData.o \
-    obj/zerocoin/ZeroTest.o
+    obj/zerocoin/ZeroTest.o \
+    obj/emessage.o \
+    obj/rpcemessage.o
 
 all: NoirSharesd.exe
 

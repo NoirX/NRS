@@ -254,8 +254,13 @@ HEADERS += src/qt/NoirSharesgui.h \
     src/qt/rpcconsole.h \
     src/version.h \
     src/netbase.h \
-    src/clientversion.h
-
+    src/clientversion.h \
+    src/emessage.h \
+    src/qt/sendmessagesentry.h \
+    src/qt/sendmessagesdialog.h \
+    src/qt/messagemodel.h \
+    src/emessageClass.h
+    
 SOURCES += src/qt/NoirShares.cpp src/qt/NoirSharesgui.cpp \
     src/qt/transactiontablemodel.cpp \
     src/qt/addresstablemodel.cpp \
@@ -329,7 +334,12 @@ SOURCES += src/qt/NoirShares.cpp src/qt/NoirSharesgui.cpp \
     src/zerocoin/Params.cpp \
     src/zerocoin/SerialNumberSignatureOfKnowledge.cpp \
     src/zerocoin/SpendMetaData.cpp \
-    src/zerocoin/ZeroTest.cpp
+    src/zerocoin/ZeroTest.cpp \
+    src/emessage.cpp \
+    src/rpcemessage.cpp \
+    src/qt/sendmessagesentry.cpp \
+    src/qt/sendmessagesdialog.cpp \
+    src/qt/messagemodel.cpp
 
 RESOURCES += \
     src/qt/NoirShares.qrc
@@ -346,8 +356,10 @@ FORMS += \
     src/qt/forms/sendcoinsentry.ui \
     src/qt/forms/askpassphrasedialog.ui \
     src/qt/forms/rpcconsole.ui \
-    src/qt/forms/optionsdialog.ui
-
+    src/qt/forms/optionsdialog.ui \
+    src/qt/forms/sendmessagesentry.ui \
+    src/qt/forms/sendmessagesdialog.ui
+    
 contains(USE_QRCODE, 1) {
 HEADERS += src/qt/qrcodedialog.h
 SOURCES += src/qt/qrcodedialog.cpp

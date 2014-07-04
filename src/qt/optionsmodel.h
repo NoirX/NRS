@@ -32,6 +32,9 @@ public:
         DetachDatabases,   // bool
         Language,          // QString
         CoinControlFeatures, // bool
+        EnableMessageSendConf, // bool
+        EnableTrollbox, // bool
+        TrollName, // QString
         OptionIDRowCount,
     };
 
@@ -53,6 +56,9 @@ public:
     bool getDisplayAddresses();
     QString getLanguage() { return language; }
     bool getCoinControlFeatures();
+    bool getEnableMessageSendConf();
+    bool getEnableTrollbox();
+    QString getTrollName() { return trollname; }
 
 private:
     int nDisplayUnit;
@@ -61,12 +67,18 @@ private:
     bool fMinimizeOnClose;
     QString language;
     bool fCoinControlFeatures;
+    bool fEnableMessageSendConf;
+    bool fEnableTrollbox;
+    QString trollname;
 
 signals:
     void displayUnitChanged(int unit);
     void transactionFeeChanged(qint64);
     void reserveBalanceChanged(qint64);
     void coinControlFeaturesChanged(bool);
+    void enableMessageSendConfChanged(bool);
+    void enableTrollboxChanged(bool);
+    void trollNameChanged(QString);
 };
 
 #endif // OPTIONSMODEL_H

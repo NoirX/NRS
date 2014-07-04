@@ -406,16 +406,10 @@ bool AppInit2()
 
     // -debug implies fDebug*
     if (fDebug)
-    {
-        fDebugNet  = true;
-        fDebugSmsg = true;
-    } else
-    {
-        fDebugNet  = GetBoolArg("-debugnet");
-        fDebugSmsg = GetBoolArg("-debugsmsg");
-    }
-    fNoSmsg = GetBoolArg("-nosmsg");
-    
+        fDebugNet = true;
+    else
+        fDebugNet = GetBoolArg("-debugnet");
+
     bitdb.SetDetach(GetBoolArg("-detachdb", false));
 
 #if !defined(WIN32) && !defined(QT_GUI)

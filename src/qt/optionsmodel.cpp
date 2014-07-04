@@ -49,8 +49,10 @@ void OptionsModel::Init()
     nReserveBalance = settings.value("nReserveBalance").toLongLong();
     language = settings.value("language", "").toString();
     fCoinControlFeatures = settings.value("fCoinControlFeatures", false).toBool();
-
-    // These are shared with core NoirShares; we want
+    fEnableMessageSendConf = settings.value("fEnableMessageSendConf", true).toBool();
+    fEnableTrollbox = settings.value("fEnableTrollbox", false).toBool();
+    trollname = settings.value("trollname", "").toString();
+    // These are shared with core Bitcoin; we want
     // command-line options to override the GUI settings:
     if (settings.contains("fUseUPnP"))
         SoftSetBoolArg("-upnp", settings.value("fUseUPnP").toBool());
@@ -176,6 +178,12 @@ QVariant OptionsModel::data(const QModelIndex & index, int role) const
             return settings.value("language", "");
         case CoinControlFeatures:
             return QVariant(fCoinControlFeatures);
+        case EnableMessageSendConf:
+            return QVariant(fEnableMessageSendConf);
+        case EnableTrollbox:
+            return QVariant(fEnableTrollbox);
+        case TrollName:
+            return settings.value("trollname", "");
         default:
             return QVariant();
         }
@@ -271,11 +279,28 @@ bool OptionsModel::setData(const QModelIndex & index, const QVariant & value, in
             settings.setValue("language", value);
             break;
         case CoinControlFeatures: {
-            fCoinControlFeatures = value.toBool();
-            settings.setValue("fCoinControlFeatures", fCoinControlFeatures);
-            emit coinControlFeaturesChanged(fCoinControlFeatures);
-            }
-            break; 
+             fCoinControlFeatures = value.toBool();
+             settings.setValue("fCoinControlFeatures", fCoinControlFeatures);
+             emit coinControlFeaturesChanged(fCoinControlFeatures);
+             }
+             break;
+        case EnableMessageSendConf: {
+             fEnableMessageSendConf = value.toBool();
+             settings.setValue("fEnableMessageSendConf", fEnableMessageSendConf);
+             emit enableMessageSendConfChanged(fEnableMessageSendConf);
+             }
+             break;
+        case EnableTrollbox: {
+             fEnableTrollbox = value.toBool();
+             settings.setValue("fEnableTrollbox", fEnableTrollbox);
+             emit enableTrollboxChanged(fEnableTrollbox);
+             }
+             break;
+        case TrollName:
+            trollname = value.toString();
+            settings.setValue("trollname", trollname);
+            emit trollNameChanged(trollname);
+            break;
         default:
             break;
         }
@@ -304,6 +329,15 @@ bool OptionsModel::getCoinControlFeatures()
 {
     return fCoinControlFeatures;
 } 
+bool OptionsModel::getEnableMessageSendConf()
+{
+    return fEnableMessageSendConf;
+}
+
+bool OptionsModel::getEnableTrollbox()
+{
+    return fEnableTrollbox;
+}
 
 bool OptionsModel::getMinimizeOnClose()
 {

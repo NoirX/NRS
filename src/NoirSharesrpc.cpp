@@ -268,6 +268,11 @@ static const CRPCCommand vRPCCommands[] =
     { "resendtx",               &resendtx,               false,  true},
     { "makekeypair",            &makekeypair,            false,  true},
     { "sendalert",              &sendalert,              false,  false},
+    { "smsgscanchain",          &smsgscanchain,          false,  false},
+    { "smsgaddkey",             &smsgaddkey,             false,  false},
+    { "smsgsend",               &smsgsend,               false,  false},
+    { "smsggetlocalpubkey",     &smsggetlocalpubkey,     false,  false},
+    { "smsgsendanon",           &smsgsendanon,           false,  false},
 };
 
 CRPCTable::CRPCTable()
