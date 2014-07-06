@@ -86,13 +86,16 @@ namespace bts
        return r;
     }
  
-    bool momentum_verify( uint256 head, uint32_t a, uint32_t b )
+    bool momentum_verify( uint256 head, uint32_t a, uint32_t b, uint32_t c, uint32_t d, uint32_t e )
     {
        // std::cerr<<"verify  "<<a<<"  and "<<b<<"  mid: "<<head.ToString()<<"\n";
        // std::cerr<<"    "<<getBirthdayHash(head,a)<<"   "<<getBirthdayHash(head,b)<<"\n";
        if( a == b ) return false;
        if( a > MAX_MOMENTUM_NONCE ) return false;
-       if( b > MAX_MOMENTUM_NONCE ) return false;      
+       if( b > MAX_MOMENTUM_NONCE ) return false;
+       if( c != 0 ) return false;
+       if( d != 0 ) return false;
+       if( e != 0 ) return false;
 
        bool r = (getBirthdayHash(head,a) == getBirthdayHash(head,b));
 

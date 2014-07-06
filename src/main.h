@@ -48,7 +48,9 @@ static const int fHaveUPnP = true;
 static const int fHaveUPnP = false;
 #endif
 
-static const uint256 hashGenesisBlockOfficial("0x0184ba6f36581ce17b443111bdae8f367616a293be73a2bf344d78cdc95c08a4");
+//static const uint256 hashGenesisBlockOfficial("0x0184ba6f36581ce17b443111bdae8f367616a293be73a2bf344d78cdc95c08a4");
+static const uint256 hashGenesisBlockOfficial("0x01aced10cbd51a931eabe959c49d44a59686407623f3ae6b89fc425085600399");
+
 static const uint256 hashGenesisBlockTestNet("0x");
 
 static const int64 nMaxClockDrift = 2 * 60 * 60;        // two hours
@@ -839,6 +841,9 @@ public:
     unsigned int nNonce;
     uint32_t nBirthdayA;
     uint32_t nBirthdayB;
+    uint32_t nBirthdayC;
+    uint32_t nBirthdayD;
+    uint32_t nBirthdayE;
 
     // network and disk
     std::vector<CTransaction> vtx;
@@ -869,7 +874,9 @@ public:
         READWRITE(nNonce);
         READWRITE(nBirthdayA);
         READWRITE(nBirthdayB);
-        
+        READWRITE(nBirthdayC);
+        READWRITE(nBirthdayD);
+        READWRITE(nBirthdayE);
 
         // ConnectBlock depends on vtx following header to generate CDiskTxPos
         if (!(nType & (SER_GETHASH|SER_BLOCKHEADERONLY)))
@@ -893,7 +900,10 @@ public:
         nBits = 0;
         nNonce = 0;
         nBirthdayA = 0;
-		nBirthdayB = 0;
+	nBirthdayB = 0;
+	nBirthdayC = 0;
+	nBirthdayD = 0;
+	nBirthdayE = 0;
         vtx.clear();
         vchBlockSig.clear();
         vMerkleTree.clear();
@@ -1158,6 +1168,9 @@ public:
     unsigned int nNonce;
     uint32_t nBirthdayA;
     uint32_t nBirthdayB;
+    uint32_t nBirthdayC;
+    uint32_t nBirthdayD;
+    uint32_t nBirthdayE;
 
     CBlockIndex()
     {
@@ -1183,7 +1196,10 @@ public:
         nBits          = 0;
         nNonce         = 0;
         nBirthdayA = 0;
-		nBirthdayB = 0;
+	nBirthdayB = 0;
+	nBirthdayC = 0;
+	nBirthdayD = 0;
+	nBirthdayE = 0;
     }
 
     CBlockIndex(unsigned int nFileIn, unsigned int nBlockPosIn, CBlock& block)
@@ -1219,7 +1235,10 @@ public:
         nBits          = block.nBits;
         nNonce         = block.nNonce;
         nBirthdayA = block.nBirthdayA;
-		nBirthdayB = block.nBirthdayB;
+	nBirthdayB = block.nBirthdayB;
+	nBirthdayC = block.nBirthdayC;
+	nBirthdayD = block.nBirthdayD;
+	nBirthdayE = block.nBirthdayE;
     }
 
     CBlock GetBlockHeader() const
@@ -1234,6 +1253,9 @@ public:
         block.nNonce         = nNonce;
         block.nBirthdayA  = nBirthdayA;
         block.nBirthdayB  = nBirthdayB;
+        block.nBirthdayC  = nBirthdayC;
+        block.nBirthdayD  = nBirthdayD;
+        block.nBirthdayE  = nBirthdayE;
         return block;
     }
 
@@ -1344,8 +1366,8 @@ public:
 
     std::string ToString() const
     {
-        return strprintf("CBlockIndex(nprev=%p, pnext=%p, nFile=%u, nBlockPos=%-6d nHeight=%d, nMint=%s, nMoneySupply=%s, nFlags=(%s)(%d)(%s), nStakeModifier=%016"PRI64x", nStakeModifierChecksum=%08x, hashProofOfStake=%s, prevoutStake=(%s), nStakeTime=%d merkle=%s, hashBlock=%s, birthdayA=%u, birthdayB=%u)",
-            pprev, pnext, nFile, nBlockPos, nHeight, nBirthdayA, nBirthdayB,
+        return strprintf("CBlockIndex(nprev=%p, pnext=%p, nFile=%u, nBlockPos=%-6d nHeight=%d, nMint=%s, nMoneySupply=%s, nFlags=(%s)(%d)(%s), nStakeModifier=%016"PRI64x", nStakeModifierChecksum=%08x, hashProofOfStake=%s, prevoutStake=(%s), nStakeTime=%d merkle=%s, hashBlock=%s, birthdayA=%u, birthdayB=%u, birthdayC=%u, birthdayD=%u, birthdayE=%u)",
+            pprev, pnext, nFile, nBlockPos, nHeight, nBirthdayA, nBirthdayB, nBirthdayC, nBirthdayD, nBirthdayE,
             FormatMoney(nMint).c_str(), FormatMoney(nMoneySupply).c_str(),
             GeneratedStakeModifier() ? "MOD" : "-", GetStakeEntropyBit(), IsProofOfStake()? "PoS" : "PoW",
             nStakeModifier, nStakeModifierChecksum,
@@ -1418,6 +1440,9 @@ public:
         READWRITE(nNonce);
         READWRITE(nBirthdayA);
         READWRITE(nBirthdayB);
+        READWRITE(nBirthdayC);
+        READWRITE(nBirthdayD);
+        READWRITE(nBirthdayE);
     )
 
     uint256 GetBlockHash() const
@@ -1430,8 +1455,11 @@ public:
         block.nBits           = nBits;
         block.nNonce          = nNonce;
         block.nBirthdayA = nBirthdayA;
-		block.nBirthdayB = nBirthdayB;
-        
+	block.nBirthdayB = nBirthdayB;
+	block.nBirthdayC = nBirthdayC;
+	block.nBirthdayD = nBirthdayD;
+	block.nBirthdayE = nBirthdayE;
+
         return block.GetHash();
     }
 

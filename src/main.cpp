@@ -34,7 +34,8 @@ unsigned int nTransactionsUpdated = 0;
 map<uint256, CBlockIndex*> mapBlockIndex;
 set<pair<COutPoint, unsigned int> > setStakeSeen;
 uint256 hashGenesisBlock = hashGenesisBlockOfficial;
-uint256 merkleRootGenesisBlock("0x2fa20c3b0b164955238b4c85a5cfc97dffb92dcd219da0a6bb3246b1fbbfb6b0");
+//uint256 merkleRootGenesisBlock("0x2fa20c3b0b164955238b4c85a5cfc97dffb92dcd219da0a6bb3246b1fbbfb6b0");
+uint256 merkleRootGenesisBlock("0xa7904239f55cc3294d46afcc6248e0f0fb5a9211aa07af77fe1ce1cd3f891219");
 
 uint256 smallestInvalidHash = uint256("0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff0000");
 
@@ -49,7 +50,13 @@ static CBigNum bnProofOfStakeLimitTestNet(~uint256(0) >> 2);
 unsigned int nStakeMinAge = 60 * 60 * 24 * 7; // minimum age for coin age
 unsigned int nStakeMaxAge = 60 * 60 * 24 * 14; // stake age of full weight
 unsigned int nStakeTargetSpacing = 5 * 60; //  5 minute block spacing
-const int64 nChainStartTime = 139193290; 
+const int64 nChainStartTime = 1403734326;
+const unsigned long nChainStartNonce = 1;
+const unsigned long nChainStartBirthdayA = 2342756;
+const unsigned long nChainStartBirthdayB = 5127288;
+const unsigned long nChainStartBirthdayC = 0;
+const unsigned long nChainStartBirthdayD = 0;
+const unsigned long nChainStartBirthdayE = 0;
 const int64 nTestNetStartTime = nChainStartTime; 
 int nCoinbaseMaturity = 10; // mining need 30 confirm
 CBlockIndex* pindexGenesisBlock = NULL;
@@ -1157,12 +1164,15 @@ void CBlock::UpdateTime(const CBlockIndex* pindexPrev)
  		//printf("GetHash - MidHash %s\n", midHash.ToString().c_str());
  		//printf("GetHash - Birthday A %u hash \n", nBirthdayA);
  		//printf("GetHash - Birthday B %u hash \n", nBirthdayB);
+ 		//printf("GetHash - Birthday C %u hash \n", nBirthdayC);
+ 		//printf("GetHash - Birthday D %u hash \n", nBirthdayD);
+ 		//printf("GetHash - Birthday E %u hash \n", nBirthdayE);
 		
 		
-		    uint256 r = Hash(BEGIN(nVersion), END(nBirthdayB));
+		    uint256 r = Hash(BEGIN(nVersion), END(nBirthdayE));
  //    fprintf( stderr, "init hash %s\n", r.ToString().c_str() );
  
-     return r; //Hash(BEGIN(nVersion), END(nBirthdayB));
+     return r; //Hash(BEGIN(nVersion), END(nBirthdayE));
  }
  
  uint256 CBlock::GetVerifiedHash() const
@@ -1173,17 +1183,20 @@ void CBlock::UpdateTime(const CBlockIndex* pindexPrev)
  		//printf("GetHash - MidHash %s\n", midHash.ToString().c_str());
  		//printf("GetHash - Birthday A %u hash \n", nBirthdayA);
  		//printf("GetHash - Birthday B %u hash \n", nBirthdayB);
+ 		//printf("GetHash - Birthday C %u hash \n", nBirthdayC);
+ 		//printf("GetHash - Birthday D %u hash \n", nBirthdayD);
+ 		//printf("GetHash - Birthday E %u hash \n", nBirthdayE);
 		
 		
-		    uint256 r = Hash(BEGIN(nVersion), END(nBirthdayB));
+		    uint256 r = Hash(BEGIN(nVersion), END(nBirthdayE));
  //    fprintf( stderr, "init hash %s\n", r.ToString().c_str() );
  
 
- 		if(IsProofOfWork() && !bts::momentum_verify( midHash, nBirthdayA, nBirthdayB)){
+ 		if(IsProofOfWork() && !bts::momentum_verify( midHash, nBirthdayA, nBirthdayB, nBirthdayC, nBirthdayD, nBirthdayE)){
  			return uint256("0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffeeee");
  		}
    
-     return r; //Hash(BEGIN(nVersion), END(nBirthdayB));
+     return r; //Hash(BEGIN(nVersion), END(nBirthdayE));
  }
  
  uint256 CBlock::CalculateBestBirthdayHash() {
@@ -1192,20 +1205,29 @@ void CBlock::UpdateTime(const CBlockIndex* pindexPrev)
  		std::vector< std::pair<uint32_t,uint32_t> > results =bts::momentum_search( midHash );
  		uint32_t candidateBirthdayA=0;
  		uint32_t candidateBirthdayB=0;
+ 		uint32_t candidateBirthdayC=0;
+ 		uint32_t candidateBirthdayD=0;
+ 		uint32_t candidateBirthdayE=0;
 		uint256 smallestHashSoFar("0xfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffdddd");
 		for (unsigned i=0; i < results.size(); i++) {
 			nBirthdayA = results[i].first;
 			nBirthdayB = results[i].second;
-			uint256 fullHash = Hash(BEGIN(nVersion), END(nBirthdayB));
+			uint256 fullHash = Hash(BEGIN(nVersion), END(nBirthdayE));
 			if(fullHash<smallestHashSoFar){
 				//if better, update candidate birthdays
 				//printf("best hash so far for the nonce\n");
 				smallestHashSoFar=fullHash;
 				candidateBirthdayA=results[i].first;
 				candidateBirthdayB=results[i].second;
+				candidateBirthdayC=0;
+				candidateBirthdayD=0;
+				candidateBirthdayE=0;
 			}
 			nBirthdayA = candidateBirthdayA;
  			nBirthdayB = candidateBirthdayB;
+ 			nBirthdayC = candidateBirthdayC;
+ 			nBirthdayD = candidateBirthdayD;
+ 			nBirthdayE = candidateBirthdayE;
  		}
  		
  		return GetHash();
@@ -2078,8 +2100,8 @@ bool CBlock::CheckBlock(bool fCheckPOW, bool fCheckMerkleRoot) const
 
     // --- patch start//Patch from XertroV, great thanks to him https://bitcointalk.org/index.php?action=profile;u=37740
         // blacklist
-        if (GetHash() == uint256("0x000000082f31f8c70dd7f9a857f04fe14f7df2a57bb9bc1f54d336c70dea6205"))
-            return error("CheckBlock() : hash == 000000082f31f8c70dd7f9a857f04fe14f7df2a57bb9bc1f54d336c70dea6205");
+//        if (GetHash() == uint256("0x000000082f31f8c70dd7f9a857f04fe14f7df2a57bb9bc1f54d336c70dea6205"))
+//            return error("CheckBlock() : hash == 000000082f31f8c70dd7f9a857f04fe14f7df2a57bb9bc1f54d336c70dea6205");
         // --- patch end
 
         
@@ -2571,6 +2593,84 @@ FILE* AppendBlockFile(unsigned int& nFileRet)
     }
 }
 
+void BuildNewGenesisBlock()
+{
+        // Genesis block
+        const char* pszTimestamp = "NoirShares - Future in hand.";
+        CTransaction txNew;
+        txNew.nTime = GetTime();
+        txNew.vin.resize(1);
+        txNew.vout.resize(1);
+        vector<unsigned char> scriptPubKeyAddress = ParseHex("04678afdb0fe5548271967f1a67130b7105cd6a828e03909a67962e0ea1f61deb649f6bc3f4cef38c4f35504e51ec112de5c384df7ba0b8d578a4c702b6bf11d5f");
+		uint64 scriptSigInt = 486604799;
+		txNew.vin[0].scriptSig = CScript() << scriptSigInt << CBigNum(4) << vector<unsigned char>((const unsigned char*)pszTimestamp, (const unsigned char*)pszTimestamp + strlen(pszTimestamp));
+        txNew.vout[0].SetEmpty();
+        txNew.vout[0].scriptPubKey = CScript() << scriptPubKeyAddress << OP_CHECKSIG;
+        txNew.strTxComment = "text: Republic of Internet ";
+
+
+        CBlock block;
+        block.vtx.push_back(txNew);
+        block.hashPrevBlock = 0;
+        block.hashMerkleRoot = block.BuildMerkleTree();
+        block.nVersion = 1;
+        block.nTime    = txNew.nTime;
+        block.nBits    = bnProofOfWorkLimit.GetCompact();
+        block.nNonce   = nChainStartNonce;
+        block.nBirthdayA   = nChainStartBirthdayA;
+        block.nBirthdayB   = nChainStartBirthdayB;
+        block.nBirthdayC   = nChainStartBirthdayC;
+        block.nBirthdayD   = nChainStartBirthdayD;
+        block.nBirthdayE   = nChainStartBirthdayE;
+        
+	{
+		printf("Generating new genesis block...\n");
+		uint256 hashTarget = CBigNum().SetCompact(block.nBits).getuint256();
+		uint256 testHash;
+		block.nNonce = 0;
+		block.nBirthdayA = 0;
+		block.nBirthdayB = 0;
+		block.nBirthdayC = 0;
+		block.nBirthdayD = 0;
+		block.nBirthdayE = 0;
+		for (;;)
+		{
+			block.nNonce=block.nNonce+1;
+			testHash=block.CalculateBestBirthdayHash();
+			printf("testHash %s\n", testHash.ToString().c_str());
+			printf("Hash Target %s\n", hashTarget.ToString().c_str());
+			if(testHash<hashTarget){
+				printf("Found Genesis Block Hash: %s\n", testHash.ToString().c_str());
+				printf("Found Genesis Block Merkle Root: %s\n", block.hashMerkleRoot.ToString().c_str());
+				printf("Found Genesis Block nNonce: %d\n", block.nNonce);
+				printf("Found Genesis Block nTime: %d\n", block.nTime);
+				printf("Found Genesis Block nBirthdayA: %d\n", block.nBirthdayA);
+				printf("Found Genesis Block nBirthdayB: %d\n", block.nBirthdayB);
+				printf("Found Genesis Block nBirthdayC: %d\n", block.nBirthdayC);
+				printf("Found Genesis Block nBirthdayD: %d\n", block.nBirthdayD);
+				printf("Found Genesis Block nBirthdayE: %d\n", block.nBirthdayE);
+				break;
+			}
+		}
+	}
+
+        //// debug print
+        uint256 hash = block.GetHash();
+        printf("block.nBits = %u \n", block.nBits);
+        printf("Hash: %s\n", hash.ToString().c_str());
+        printf("block.nTime = %u \n", block.nTime);
+        printf("Genesis: %s\n", hashGenesisBlock.ToString().c_str());
+        printf("MROOT: %s\n", block.hashMerkleRoot.ToString().c_str());
+        printf("coin nNonce=%d;\n",block.nNonce);
+        printf("birthdayA=%u;\n",block.nBirthdayA);
+        printf("birthdayB=%u;\n",block.nBirthdayB);
+        printf("birthdayC=%u;\n",block.nBirthdayC);
+        printf("birthdayD=%u;\n",block.nBirthdayD);
+        printf("birthdayE=%u;\n",block.nBirthdayE);
+        block.print();
+}
+
+
 bool LoadBlockIndex(bool fAllowNew)
 {
     if (fTestNet)
@@ -2626,9 +2726,12 @@ bool LoadBlockIndex(bool fAllowNew)
         block.nVersion = 1;
         block.nTime    = nChainStartTime;
         block.nBits    = bnProofOfWorkLimit.GetCompact();
-        block.nNonce   = 4;
-		block.nBirthdayA   = 21327367;
-        block.nBirthdayB   = 35589541;
+        block.nNonce   = nChainStartNonce;
+        block.nBirthdayA   = nChainStartBirthdayA;
+        block.nBirthdayB   = nChainStartBirthdayB;
+        block.nBirthdayC   = nChainStartBirthdayC;
+        block.nBirthdayD   = nChainStartBirthdayD;
+        block.nBirthdayE   = nChainStartBirthdayE;
         
         //// debug print
         uint256 hash = block.GetHash();
@@ -2640,8 +2743,17 @@ bool LoadBlockIndex(bool fAllowNew)
         printf("coinnNonce=%d;\n",block.nNonce);
 		printf("birthdayA=%u;\n",block.nBirthdayA);
 		printf("birthdayB=%u;\n",block.nBirthdayB);
+		printf("birthdayC=%u;\n",block.nBirthdayC);
+		printf("birthdayD=%u;\n",block.nBirthdayD);
+		printf("birthdayE=%u;\n",block.nBirthdayE);
         block.print();
-
+/*
+	if ((block.hashMerkleRoot != merkleRootGenesisBlock) || (hash == hashGenesisBlock) || (!block.CheckBlock()))
+	{
+		printf("Generating new genesis block...\n");
+		BuildNewGenesisBlock();
+	}
+*/
         assert(block.hashMerkleRoot == merkleRootGenesisBlock);
         block.print();
         assert(hash == hashGenesisBlock);
@@ -4321,6 +4433,9 @@ void FormatHashBuffers(CBlock* pblock, char* pmidstate, char* pdata, char* phash
             unsigned int nNonce;
             unsigned int nBirthdayA;
             unsigned int nBirthdayB;
+            unsigned int nBirthdayC;
+            unsigned int nBirthdayD;
+            unsigned int nBirthdayE;
         }
         block;
         unsigned char pchPadding0[64];
@@ -4338,6 +4453,9 @@ void FormatHashBuffers(CBlock* pblock, char* pmidstate, char* pdata, char* phash
     tmp.block.nNonce         = pblock->nNonce;
     tmp.block.nBirthdayA     = pblock->nBirthdayA;
     tmp.block.nBirthdayB     = pblock->nBirthdayB;
+    tmp.block.nBirthdayC     = pblock->nBirthdayC;
+    tmp.block.nBirthdayD     = pblock->nBirthdayD;
+    tmp.block.nBirthdayE     = pblock->nBirthdayE;
 
     FormatHashBlocks(&tmp.block, sizeof(tmp.block));
     //FormatHashBlocks(&tmp.hash1, sizeof(tmp.hash1));

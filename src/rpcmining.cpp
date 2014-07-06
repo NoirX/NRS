@@ -241,6 +241,9 @@ Value getworkex(const Array& params, bool fHelp)
         pblock->nNonce = pdata->nNonce;
         pblock->nBirthdayA = pdata->nBirthdayA;
         pblock->nBirthdayB = pdata->nBirthdayB;
+        pblock->nBirthdayC = pdata->nBirthdayC;
+        pblock->nBirthdayD = pdata->nBirthdayD;
+        pblock->nBirthdayE = pdata->nBirthdayE;
 
         if(coinbase.size() == 0)
             pblock->vtx[0].vin[0].scriptSig = mapNewBlock[pdata->hashMerkleRoot].second;
@@ -344,11 +347,14 @@ Value getwork(const Array& params, bool fHelp)
         
         pblock->nBirthdayA = 0;
         pblock->nBirthdayB = 0;
+        pblock->nBirthdayC = 0;
+        pblock->nBirthdayD = 0;
+        pblock->nBirthdayE = 0;
 
         uint256 hashTarget = CBigNum().SetCompact(pblock->nBits).getuint256();
 		uint256 initHash = pblock->GetHash();
        //  fprintf( stderr, "init hash %s\n", initHash.ToString().c_str() );
-         memcpy( pdata, (char*)pblock, 88 );
+         memcpy( pdata, (char*)pblock, 88+12 );
 
         Object result;
         result.push_back(Pair("midstate", HexStr(BEGIN(pmidstate), END(pmidstate)))); // deprecated
@@ -379,6 +385,9 @@ Value getwork(const Array& params, bool fHelp)
         pblock->nNonce = pdata->nNonce;
         pblock->nBirthdayA = pdata->nBirthdayA;
         pblock->nBirthdayB = pdata->nBirthdayB;
+        pblock->nBirthdayC = pdata->nBirthdayC;
+        pblock->nBirthdayD = pdata->nBirthdayD;
+        pblock->nBirthdayE = pdata->nBirthdayE;
         pblock->vtx[0].vin[0].scriptSig = mapNewBlock[pdata->hashMerkleRoot].second;
         pblock->hashMerkleRoot = pblock->BuildMerkleTree();
 
@@ -386,7 +395,7 @@ Value getwork(const Array& params, bool fHelp)
             throw JSONRPCError(-100, "Unable to sign block, wallet locked?");
 
         //return CheckWork(pblock, *pwalletMain, reservekey);
-        // fprintf( stderr, "birthday %d %d %d \n", pblock->nNonce, pblock->nBirthdayA, pblock->nBirthdayB);
+        // fprintf( stderr, "birthday %d %d %d %d %d %d \n", pblock->nNonce, pblock->nBirthdayA, pblock->nBirthdayB, pblock->nBirthdayC, pblock->nBirthdayD, pblock->nBirthdayE);
          uint256 posthash = pblock->GetHash();
         // fprintf( stderr, "post hash %s\n", posthash.ToString().c_str() );
  
