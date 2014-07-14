@@ -15,7 +15,6 @@
 #include <boost/filesystem.hpp>
 #include <boost/filesystem/fstream.hpp>
 #include "momentum.h"
-#include "emessage.h"
 
 using namespace std;
 using namespace boost;
@@ -3612,7 +3611,6 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv)
 
     else
     {
-		SecureMsgReceiveData(pfrom, strCommand, vRecv);
         // Ignore unknown commands for extensibility
     }
 
@@ -3904,8 +3902,6 @@ bool SendMessages(CNode* pto, bool fSendTrickle)
         if (!vGetData.empty())
             pto->PushMessage("getdata", vGetData);
 
-		SecureMsgSendData(pto, fSendTrickle); // should be in cs_main?
-		
     }
     return true;
 }

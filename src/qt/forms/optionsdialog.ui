@@ -23,7 +23,7 @@
       <enum>QTabWidget::North</enum>
      </property>
      <property name="currentIndex">
-      <number>4</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tabMain">
       <attribute name="title">
@@ -198,7 +198,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QValidatedLineEdit" name="proxyIp">
+          <widget class="QValidatedLineEdit" name="proxyIp" native="true">
            <property name="maximumSize">
             <size>
              <width>140</width>
@@ -408,85 +408,6 @@
           <size>
            <width>20</width>
            <height>40</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-      </layout>
-     </widget>
-     <widget class="QWidget" name="tabComms">
-      <attribute name="title">
-       <string>&amp;Communication</string>
-      </attribute>
-      <layout class="QVBoxLayout" name="verticalLayout_4">
-       <item>
-        <widget class="QGroupBox" name="groupBoxEM">
-         <property name="title">
-          <string>Encrypted Messaging Settings</string>
-         </property>
-         <layout class="QVBoxLayout" name="verticalLayout_3">
-          <item>
-           <widget class="QCheckBox" name="enableMessageSendConf">
-            <property name="text">
-             <string>&amp;Show send confirmation dialog</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item>
-        <widget class="QGroupBox" name="groupBoxTrollbox">
-         <property name="title">
-          <string>Trollbox Settings</string>
-         </property>
-         <layout class="QVBoxLayout" name="verticalLayout_2">
-          <item>
-           <widget class="QCheckBox" name="enableTrollbox">
-            <property name="text">
-             <string>&amp;Enable Trollbox</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <layout class="QHBoxLayout" name="horizontalLayout">
-            <item>
-             <widget class="QLabel" name="label">
-              <property name="text">
-               <string>Troll N&amp;ame:</string>
-              </property>
-              <property name="textInteractionFlags">
-               <set>Qt::LinksAccessibleByMouse</set>
-              </property>
-              <property name="buddy">
-               <cstring>trollNameEdit</cstring>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLineEdit" name="trollNameEdit">
-              <property name="frame">
-               <bool>true</bool>
-              </property>
-              <property name="placeholderText">
-               <string>Enter your nickname</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item>
-        <spacer name="verticalSpacer">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>71</height>
           </size>
          </property>
         </spacer>

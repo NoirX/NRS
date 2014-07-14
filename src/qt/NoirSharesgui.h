@@ -7,16 +7,10 @@
 class TransactionTableModel;
 class ClientModel;
 class WalletModel;
-class MessageModel;
-class IRCModel;
 class TransactionView;
 class OverviewPage;
 class AddressBookPage;
-class MessagePage;
-class InvoicePage;
-class ReceiptPage;
 class SendCoinsDialog;
-class SendMessagesDialog;
 class SignVerifyMessageDialog;
 class Notificator;
 class RPCConsole;
@@ -52,16 +46,6 @@ public:
         functionality.
     */
     void setWalletModel(WalletModel *walletModel);
-    /** Set the message model.
-        The message model represents a represents the encrypted messaging suite, and offers access to the list of message, contacts book and sending
-        functionality.
-    */
-    void setMessageModel(MessageModel *messageModel);
-    /** Set the irc model.
-        The irc model represents a represents the irc suite, and offers access to sending and receiving
-        functionality.
-    */
-    void setIRCModel(IRCModel *ircModel);
 
 protected:
     void changeEvent(QEvent *e);
@@ -72,8 +56,6 @@ protected:
 private:
     ClientModel *clientModel;
     WalletModel *walletModel;
-    MessageModel *messageModel;
-    IRCModel *ircModel;
 
     QStackedWidget *centralWidget;
 
@@ -81,13 +63,7 @@ private:
     QWidget *transactionsPage;
     AddressBookPage *addressBookPage;
     AddressBookPage *receiveCoinsPage;
-    MessagePage *messagePage;
-    InvoicePage *invoicePage;
-    ReceiptPage *receiptPage;
     SendCoinsDialog *sendCoinsPage;
-    SendMessagesDialog *sendMessagesPage;
-    SendMessagesDialog *sendMessagesAnonPage;
-    SendCoinsDialog *sendCoinsAnonPage;
     SignVerifyMessageDialog *signVerifyMessageDialog;
 
     QLabel *labelEncryptionIcon;
@@ -101,14 +77,7 @@ private:
     QAction *historyAction;
     QAction *quitAction;
     QAction *sendCoinsAction;
-    QAction *sendCoinsAnonAction;
-    QAction *sendMessagesAction;
-    QAction *sendMessagesAnonAction;
     QAction *addressBookAction;
-    QAction *messageAction;
-    QAction *invoiceAction;
-    QAction *receiptAction;
-    QAction *appAnonAction;
     QAction *signMessageAction;
     QAction *verifyMessageAction;
     QAction *aboutAction;
@@ -173,16 +142,6 @@ private slots:
     void gotoReceiveCoinsPage();
     /** Switch to send coins page */
     void gotoSendCoinsPage();
-    /** Switch to send messages page */
-    void gotoSendMessagesPage();
-    /** Switch to send anonymous messages page */
-    void gotoSendMessagesAnonPage();
-    /** Switch to view messages page */
-    void gotoMessagesPage();
-    /** Switch to invoices page */
-    void gotoInvoicesPage();
-    /** Switch to receipt page */
-    void gotoReceiptPage();
 
     /** Show Sign/Verify Message dialog and switch to sign message tab */
     void gotoSignMessageTab(QString addr = "");
@@ -202,13 +161,6 @@ private slots:
         The new items are those between start and end inclusive, under the given parent item.
     */
     void incomingTransaction(const QModelIndex & parent, int start, int end);
-
-    /** Show incoming message notification for new messages.
-
-        The new items are those between start and end inclusive, under the given parent item.
-    */
-    void incomingMessage(const QModelIndex & parent, int start, int end);
-
     /** Encrypt the wallet */
     void encryptWallet(bool status);
     /** Backup the wallet */

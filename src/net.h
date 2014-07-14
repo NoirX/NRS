@@ -18,7 +18,6 @@
 #include "netbase.h"
 #include "protocol.h"
 #include "addrman.h"
-#include "emessageclass.h"
 
 class CRequestTracker;
 class CNode;
@@ -211,8 +210,6 @@ public:
     std::vector<CInv> vInventoryToSend;
     CCriticalSection cs_inventory;
     std::multimap<int64, CInv> mapAskFor;
-    
-    SecMsgNode smsgData;
 
     CNode(SOCKET hSocketIn, CAddress addrIn, std::string addrNameIn = "", bool fInboundIn=false) : vSend(SER_NETWORK, MIN_PROTO_VERSION), vRecv(SER_NETWORK, MIN_PROTO_VERSION)
     {
