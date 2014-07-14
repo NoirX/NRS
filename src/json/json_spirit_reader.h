@@ -1,7 +1,6 @@
 #ifndef JSON_SPIRIT_READER
 #define JSON_SPIRIT_READER
 
-
 //          Copyright John W. Wilkinson 2007 - 2009.
 // Distributed under the MIT License, see accompanying file LICENSE.txt
 
